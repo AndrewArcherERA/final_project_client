@@ -1,41 +1,39 @@
-import './App.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import SignIn from "./pages/signIn/SignIn";
+import SignUp from "./pages/signUp/SignUp";
+import ConsumerDashboard from "./dashboards/consumer/ConsumerDashboard";
+import SupplierDashboard from "./dashboards/supplier/SupplierDashboard";
+import AdminDashboard from "./dashboards/admin/AdminDashboard";
 
+function ProtectedRoute({ user, redirectPath = "/" }) {
+    if (!user) return <Navigate to={redirectPath} replace />;
+
+    return <Outlet />;
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  // TODO: pull user.slice from redux store to validate navigation to private routes
+  let user = undefined;
 
-  async function handleClick(){
-    setCount(count + 1);
-  }
-
-  async function putData(){
-    const response = await axios({
-      method: 'put',
-      url: 'http://localhost:8080/counts/increment',
-      data: {
-        id: 1,
-        count: count
-      }
-    });
-
-    console.log(response);
-  }
-
-  useEffect(() => {
-    if(count)
-      putData();
-  }, [count])
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>{count}</p>
-        <button onClick={handleClick}>Click Me</button>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={<SignIn />} />
+                <Route path="/signUp" element={<SignUp />} />
+                <Route element={<ProtectedRoute user={user} />}>
+                    <Route
+                        path="/consumerDashboard"
+                        element={<ConsumerDashboard />}
+                    />
+                    <Route
+                        path="/supplierDashboard"
+                        element={<SupplierDashboard />}
+                    />
+                    <Route path="/admin/*" element={<AdminDashboard />} />
+                </Route>
+            </Routes>
+        </>
+    );
 }
 
 export default App;
