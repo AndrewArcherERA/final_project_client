@@ -3,7 +3,9 @@ import SignIn from "./pages/signIn/SignIn";
 import SignUp from "./pages/signUp/SignUp";
 import ConsumerDashboard from "./dashboards/consumer/ConsumerDashboard";
 import SupplierDashboard from "./dashboards/supplier/SupplierDashboard";
-import AdminDashboard from "./dashboards/admin/AdminDashboard";
+import EmployeeDashboard from "./dashboards/employee/EmployeeDashboard";
+import Suppliers from "./components/Suppliers";
+import Inventory from "./components/Inventory";
 
 function ProtectedRoute({ user, redirectPath = "/" }) {
     if (!user) return <Navigate to={redirectPath} replace />;
@@ -12,8 +14,8 @@ function ProtectedRoute({ user, redirectPath = "/" }) {
 }
 
 function App() {
-  // TODO: pull user.slice from redux store to validate navigation to private routes
-  let user = undefined;
+    // TODO: pull user.slice from redux store to validate navigation to private routes
+    let user = {};
 
     return (
         <>
@@ -24,12 +26,25 @@ function App() {
                     <Route
                         path="/consumerDashboard"
                         element={<ConsumerDashboard />}
-                    />
+                    >
+                        <Route
+                            index
+                            path="inventory"
+                            element={<Inventory userType={"consumer"} />}
+                        />
+                        <Route path={"suppliers"} element={<Suppliers />} />
+                    </Route>
                     <Route
                         path="/supplierDashboard"
                         element={<SupplierDashboard />}
-                    />
-                    <Route path="/admin/*" element={<AdminDashboard />} />
+                    ></Route>
+                    <Route path="/employeeDashboard" element={<EmployeeDashboard />}>
+                    <Route
+                            index
+                            path="inventory"
+                            element={<Inventory userType={"employee"} />}
+                        />
+                    </Route>
                 </Route>
             </Routes>
         </>

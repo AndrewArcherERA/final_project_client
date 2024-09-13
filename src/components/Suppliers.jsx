@@ -1,11 +1,11 @@
 import React from 'react'
 
-function AdminDashboard() {
+function Suppliers() {
   return (
     <div>
-      
+      blah balh
     </div>
   )
 }
 
-export default AdminDashboard
+export default Suppliers

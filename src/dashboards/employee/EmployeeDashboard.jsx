@@ -1,9 +1,9 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import styles from "../dashboardStyles.module.scss"
-import { Box, Typography } from "@mui/material";
 
-function ConsumerDashboard() {
+function EmployeeDashboard() {
     return (
         <>
             <Box
@@ -36,4 +36,4 @@ function ConsumerDashboard() {
     );
 }
 
-export default ConsumerDashboard;
+export default EmployeeDashboard;
