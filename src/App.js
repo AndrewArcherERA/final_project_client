@@ -9,6 +9,7 @@ import Inventory from "./pages/inventory/Inventory";
 import Products from "./pages/products/Products";
 import Messages from "./pages/messages/Messages";
 import Account from "./pages/account/Account";
+import Orders from "./pages/orders/Orders";
 
 function ConsumerProtectedRoute({ user, redirectPath = "/" }) {
     if (!user.type === "consumer")

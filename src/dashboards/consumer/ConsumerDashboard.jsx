@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 
 function ConsumerDashboard() {
     return (
-        <>
+        <Box>
             <Box
                 py={1}
                 px={3}
@@ -41,7 +41,7 @@ function ConsumerDashboard() {
             >
                 <Outlet />
             </Box>
-        </>
+        </Box>
     );
 }
 
