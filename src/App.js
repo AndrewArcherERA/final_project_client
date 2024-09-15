@@ -4,8 +4,9 @@ import SignUp from "./pages/signUp/SignUp";
 import ConsumerDashboard from "./dashboards/consumer/ConsumerDashboard";
 import SupplierDashboard from "./dashboards/supplier/SupplierDashboard";
 import EmployeeDashboard from "./dashboards/employee/EmployeeDashboard";
-import Suppliers from "./components/Suppliers";
-import Inventory from "./components/Inventory";
+import Suppliers from "./pages/suppliers/Suppliers";
+import Inventory from "./pages/inventory/Inventory";
+import Products from "./pages/products/Products";
 
 function ProtectedRoute({ user, redirectPath = "/" }) {
     if (!user) return <Navigate to={redirectPath} replace />;
@@ -37,7 +38,9 @@ function App() {
                     <Route
                         path="/supplierDashboard"
                         element={<SupplierDashboard />}
-                    ></Route>
+                    >
+                        <Route path={"products"} element={<Products />} />
+                    </Route>
                     <Route path="/employeeDashboard" element={<EmployeeDashboard />}>
                     <Route
                             index

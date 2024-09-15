@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Suppliers() {
+function Products() {
   return (
     <div>
-      blah balh
+      
     </div>
   )
 }
 
-export default Suppliers
+export default Products

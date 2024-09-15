@@ -1,9 +1,9 @@
 import { Box, Input, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
-import ConsumerHeader from "./consumerInventory/consumerInventory/ConsumerHeader";
-import ConsumerProduct from "./consumerInventory/consumerInventory/ConsumerProduct";
-import EmployeeHeader from "./employeeInventory/EmployeeHeader";
-import EmployeeProduct from "./employeeInventory/EmployeeProduct";
+import ConsumerHeader from "../../components/consumerInventory/consumerInventory/ConsumerHeader";
+import ConsumerProduct from "../../components/consumerInventory/consumerInventory/ConsumerProduct";
+import EmployeeHeader from "../../components/employeeInventory/EmployeeHeader";
+import EmployeeProduct from "../../components/employeeInventory/EmployeeProduct";
 
 function Inventory({ userType }) {
     const [location, setLoctation] = useState("Warehouse");
