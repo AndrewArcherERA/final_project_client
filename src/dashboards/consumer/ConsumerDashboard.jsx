@@ -22,6 +22,15 @@ function ConsumerDashboard() {
                     <Link to={"suppliers"} className={styles.link}>
                         <Typography variant="h6">Suppliers</Typography>
                     </Link>
+                    <Link to={"messages"} className={styles.link}>
+                        <Typography variant="h6">Messages</Typography>
+                    </Link>
+                    <Link to={"orders"} className={styles.link}>
+                        <Typography variant="h6">Orders</Typography>
+                    </Link>
+                    <Link to={"account"} className={styles.link}>
+                        <Typography variant="h6">Account</Typography>
+                    </Link>
                 </nav>
             </Box>
             <Box
