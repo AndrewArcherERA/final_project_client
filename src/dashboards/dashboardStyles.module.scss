@@ -1,7 +1,12 @@
 .nav {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+    gap: 40px;
+    justify-content: center;
+}
+.navicons {
+    display: flex;
+    gap: 40px;
+    justify-content: end;
 }
 
 .link {
