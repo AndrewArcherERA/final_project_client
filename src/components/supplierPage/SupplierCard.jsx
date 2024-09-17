@@ -12,7 +12,7 @@ function SupplierCard({ name }) {
             alignItems={"center"}
             justifyContent={"center"}
         >
-            <Typography variant="h5">Company Name</Typography>
+            <Typography variant="h5">Company Name Blah</Typography>
         </Box>
     );
 }
