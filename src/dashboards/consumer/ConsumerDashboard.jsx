@@ -2,7 +2,6 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import styles from "../dashboardStyles.module.scss";
 import { Box, Grid2, Typography } from "@mui/material";
-import { TiShoppingCart } from "react-icons/ti";
 import { IoPersonCircleSharp } from "react-icons/io5";
 
 function ConsumerDashboard() {
@@ -30,11 +29,6 @@ function ConsumerDashboard() {
                 </Grid2>
                 <Grid2 item size={2}>
                     <nav className={styles.navicons}>
-                        <Link to={"cart"} className={styles.link}>
-                            <Typography variant="h6">
-                                <TiShoppingCart size={35} />
-                            </Typography>
-                        </Link>
                         <Link to={"account"} className={styles.link}>
                             <Typography variant="h6">
                                 <IoPersonCircleSharp size={35} />
