@@ -13,7 +13,7 @@ function ConsumerDashboard() {
                 </Grid2>
                 <Grid2 item size={8}>
                     <nav className={styles.nav}>
-                        <Link to={"inventory"} className={styles.link}>
+                        <Link to={''} className={styles.link}>
                             <Typography variant="h6">Inventory</Typography>
                         </Link>
                         <Link to={"suppliers"} className={styles.link}>

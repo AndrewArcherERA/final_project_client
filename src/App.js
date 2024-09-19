@@ -49,7 +49,6 @@ function App() {
                     >
                         <Route
                             index
-                            path="inventory"
                             element={<Inventory userType={user.type} />}
                         />
                         <Route path={"suppliers"} element={<Suppliers />} />
