@@ -55,6 +55,7 @@ function Suppliers() {
                     alignItems={"center"}
                     textAlign={"center"}
                     width={"99%"}
+                    py={1}
                 >
                     <Grid2 container height={'100%'} alignItems={'center'}>
                         <Grid2 item size={2}></Grid2>

@@ -52,6 +52,7 @@ function App() {
                             element={<Inventory userType={user.type} />}
                         />
                         <Route path={"suppliers"} element={<Suppliers />} />
+                        <Route path={"messages"} element={<Messages />} />
                     </Route>
                 </Route>
 
