@@ -1,11 +1,17 @@
-import { Box, Button, Grid2, Typography } from "@mui/material";
+import { Box, Button, Grid2, Input, Typography } from "@mui/material";
 import { blue, grey, red } from "@mui/material/colors";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./messages.module.scss";
-import { TbTextWrap } from "react-icons/tb";
+import { SlPicture } from "react-icons/sl";
+import { BsPaperclip } from "react-icons/bs";
 
 // TODO: Messages needed to be stored in redux for easier rendering of messages
 function Messages() {
+    function ScrollToBottom() {
+        const elementRef = useRef();
+        useEffect(() => elementRef.current.scrollIntoView());
+        return <div ref={elementRef} />;
+    }
     return (
         <Grid2 container size={12} height={"94.1vh"}>
             <Grid2 item size={4} borderRight={2} borderColor={grey[400]}>
@@ -59,12 +65,95 @@ function Messages() {
                 >
                     <Typography variant="h4">Some Supplier</Typography>
                 </Box>
-                <Box p={3} display={"flex"} flexDirection={"column"} gap={3}>
+                <Box
+                    p={3}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    gap={3}
+                    height={"71.5vh"}
+                    className={styles.messageContainer}
+                >
                     {/* Logic to render recipient vs sender message */}
                     <Sender />
                     <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <Sender />
+                    <Recipient />
+                    <ScrollToBottom />
                 </Box>
-                <Box>Input</Box>
+                <Box
+                    height={70}
+                    borderTop={3}
+                    color={grey[400]}
+                    bgcolor={grey[200]}
+                    p={2}
+                >
+                    <Grid2
+                        container
+                        height={"100%"}
+                        alignItems={"center"}
+                        spacing={3}
+                    >
+                        <form className={styles.form}>
+                            <Grid2 item size={8}>
+                                <Input
+                                    type="text"
+                                    placeholder="Enter a message..."
+                                    className={styles.textInput}
+                                    fullWidth
+                                />
+                            </Grid2>
+                            <Grid2 item size={4} display={"flex"} gap={1}>
+                                <div>
+                                    <label
+                                        for="images"
+                                    >
+                                        <SlPicture size={50} />
+                                    </label>
+                                    <input
+                                        id="images"
+                                        style={{ display: "none" }}
+                                        type="file"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        for="files"
+                                    >
+                                        <BsPaperclip size={50} />
+                                    </label>
+                                    <input
+                                        id="files"
+                                        style={{ display: "none" }}
+                                        type="file"
+                                    />
+                                </div>
+                                <Button
+                                    variant="contained"
+                                    fullWidth
+                                    type="submit"
+                                >
+                                    Send
+                                </Button>
+                            </Grid2>
+                        </form>
+                    </Grid2>
+                </Box>
             </Grid2>
         </Grid2>
     );
@@ -73,7 +162,13 @@ function Messages() {
 function Sender(message) {
     return (
         <Box display={"flex"} justifyContent={"flex-end"}>
-            <Box bgcolor={blue[800]} maxWidth={"65%"} p={2} borderRadius={5} color={"white"}>
+            <Box
+                bgcolor={blue[800]}
+                maxWidth={"65%"}
+                p={2}
+                borderRadius={5}
+                color={"white"}
+            >
                 <Typography className={styles.message} maxWidth={"100%"}>
                     We will send a replacement! bbbbbbbbbbbbbbbbb
                     bbbbbbbbbbbbbbbbb bbbbbb bbbbbb b bbbbb
@@ -87,7 +182,13 @@ function Sender(message) {
 function Recipient(message) {
     return (
         <Box display={"flex"} justifyContent={"flex-start"}>
-            <Box bgcolor={grey[800]} maxWidth={"65%"} p={2} borderRadius={5} color={"white"}>
+            <Box
+                bgcolor={grey[800]}
+                maxWidth={"65%"}
+                p={2}
+                borderRadius={5}
+                color={"white"}
+            >
                 <Typography className={styles.message} maxWidth={"100%"}>
                     We will send a replacement! bbbbbbbbbbbbbbbbb
                     bbbbbbbbbbbbbbbbb bbbbbb bbbbbb b bbbbb
