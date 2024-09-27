@@ -122,6 +122,7 @@ function Messages() {
                                 <div>
                                     <label
                                         for="images"
+                                        className={styles.label}
                                     >
                                         <SlPicture size={50} />
                                     </label>
@@ -134,6 +135,7 @@ function Messages() {
                                 <div>
                                     <label
                                         for="files"
+                                        className={styles.label}
                                     >
                                         <BsPaperclip size={50} />
                                     </label>

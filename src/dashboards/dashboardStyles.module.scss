@@ -2,11 +2,17 @@
     display: flex;
     gap: 40px;
     justify-content: center;
+    max-height: 1vh;
 }
 .navicons {
     display: flex;
     gap: 40px;
     justify-content: end;
+    align-items: center;
+}
+.outletWrapper {
+    height: 93vh;
+    max-height: 93vh;
 }
 
 .link {
