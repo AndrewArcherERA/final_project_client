@@ -23,14 +23,11 @@ function Product() {
     right: false,
 });
 
-// TODO: Write logic for sending axios call to send order
-
 const toggleEditDrawer = (anchor, open, toggle) => (event) => {
 
     if((event.type === 'keydown' && event.key === 'Esc') || toggle) setState({ ...state, [anchor]: open });
 };
 
-// TODO: Pass in data for fields (product name, individual/unit price, numPerUnit, NumUnitsAvail, image)
 const editlist = (anchor, pricePerItem, itemsPerUnit, pricePerUnit) => (
     <Box
         width={500}
