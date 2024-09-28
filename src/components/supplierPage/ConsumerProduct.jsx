@@ -158,19 +158,19 @@ function ConsumerProduct({
         <Box borderBottom={1} height={"100px"} p={1} textAlign={"center"}>
             <Grid2 container alignItems={"center"} height={"100%"}>
                 <Grid2 size={2} item>
-                    <Typography variant="h5">Image</Typography>
+                    <Typography variant="h6">Image</Typography>
                 </Grid2>
                 <Grid2 size={2} item>
-                    <Typography variant="h5">Price Per Product</Typography>
+                    <Typography variant="h6">Price Per Product</Typography>
                 </Grid2>
                 <Grid2 size={2} item>
-                    <Typography variant="h5">Num Products Per Unit</Typography>
+                    <Typography variant="h6">Num Products Per Unit</Typography>
                 </Grid2>
                 <Grid2 size={2} item>
-                    <Typography variant="h5">Num Units Avialable</Typography>
+                    <Typography variant="h6">Num Units Avialable</Typography>
                 </Grid2>
                 <Grid2 size={2} item>
-                    <Typography variant="h5">Price per unit</Typography>
+                    <Typography variant="h6">Price per unit</Typography>
                 </Grid2>
                 <Grid2 size={2} item>
                     <Drawer
