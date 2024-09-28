@@ -1,4 +1,4 @@
-import { Box, Grid2, Input, Typography } from "@mui/material";
+import { Box, Grid2, Hidden, Input, Typography } from "@mui/material";
 import React from "react";
 import SupplierCard from "../../components/supplierPage/SupplierCard";
 import styles from "./suppliers.module.scss";
@@ -6,7 +6,7 @@ import ConsumerProduct from "../../components/supplierPage/ConsumerProduct";
 
 function Suppliers() {
     return (
-        <Box width={"100%"} height={"100%"} display={"flex"}>
+        <Box width={'90vw'} height={"70vh"} maxHeight={"70vh"} overflow={'hidden'} border={2} borderRadius={3} display={"flex"}>
             <Box width={"25%"} borderRight={2} height={"100%"}>
                 <Box
                     height={"75px"}
@@ -54,9 +54,10 @@ function Suppliers() {
                     display={"grid"}
                     alignItems={"center"}
                     textAlign={"center"}
-                    width={"99%"}
+                    py={1}
+                    paddingRight={2}
                 >
-                    <Grid2 container height={'100%'} alignItems={'center'}>
+                    <Grid2 container alignItems={'center'}>
                         <Grid2 item size={2}></Grid2>
                         <Grid2 item size={2}>
                             <Typography variant="h6" p={0}>

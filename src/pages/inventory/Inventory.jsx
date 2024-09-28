@@ -4,6 +4,7 @@ import ConsumerHeader from "../../components/consumerInventory/consumerInventory
 import ConsumerProduct from "../../components/consumerInventory/consumerInventory/ConsumerProduct";
 import EmployeeHeader from "../../components/employeeInventory/EmployeeHeader";
 import EmployeeProduct from "../../components/employeeInventory/EmployeeProduct";
+import { blue } from "@mui/material/colors";
 
 function Inventory({ userType }) {
     const [location, setLoctation] = useState("Warehouse");
@@ -47,7 +48,7 @@ function Inventory({ userType }) {
                 </Box>
             </Box>
 
-            <Box width={"80vw"} border={2} py={2} bgcolor={"blue"}>
+            <Box width={"80vw"} border={2} py={2} bgcolor={blue[400]} borderRadius={2}>
                 {/* TODO: Map products */}
                 {userType === "consumer" ? (
                     <ConsumerHeader />

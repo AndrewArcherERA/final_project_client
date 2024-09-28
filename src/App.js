@@ -10,6 +10,7 @@ import Products from "./pages/products/Products";
 import Messages from "./pages/messages/Messages";
 import Account from "./pages/account/Account";
 import Orders from "./pages/orders/Orders";
+import SupplierOrders from "./pages/supplierOrders/SupplierOrders";
 
 function ConsumerProtectedRoute({ user, redirectPath = "/" }) {
     if (!user.type === "consumer")
@@ -34,7 +35,7 @@ function EmployeeProtectedRoute({ user, redirectPath = "/" }) {
 
 function App() {
     // TODO: pull user.slice from redux store to validate navigation to private routes
-    let user = { type: "consumer" };
+    let user = { type: "employee" };
 
     return (
         <>
@@ -49,10 +50,11 @@ function App() {
                     >
                         <Route
                             index
-                            path="inventory"
                             element={<Inventory userType={user.type} />}
                         />
                         <Route path={"suppliers"} element={<Suppliers />} />
+                        <Route path={"messages"} element={<Messages />} />
+                        <Route path={"orders"} element={<Orders />} />
                     </Route>
                 </Route>
 
@@ -61,10 +63,9 @@ function App() {
                         path="/supplierDashboard"
                         element={<SupplierDashboard />}
                     >
-                        <Route path={"products"} element={<Products />} />
+                        <Route index element={<Products />} />
                         <Route path={"messages"} element={<Messages />} />
-                        <Route path={"orders"} element={<Orders />} />
-                        <Route path={"account"} element={<Account />} />
+                        <Route path={"orders"} element={<SupplierOrders />} />
                     </Route>
                 </Route>
                 <Route element={<EmployeeProtectedRoute user={user} />}>
@@ -74,9 +75,10 @@ function App() {
                     >
                         <Route
                             index
-                            path="inventory"
                             element={<Inventory userType={user.type} />}
                         />
+                        <Route path={"messages"} element={<Messages />} />
+                        <Route path={"orders"} element={<Orders />} />
                     </Route>
                 </Route>
             </Routes>

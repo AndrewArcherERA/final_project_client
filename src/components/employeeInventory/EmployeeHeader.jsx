@@ -21,8 +21,10 @@ function EmployeeHeader() {
                 <Grid2 item size={2} textAlign={"center"}>
                     Supplier Name
                 </Grid2>
-                <Grid2 item size={2} textAlign={"center"}>
+                <Grid2 item size={1} textAlign={"center"}>
                     Next Shipment
+                </Grid2>
+                <Grid2 item size={1} textAlign={"center"}>
                 </Grid2>
             </Grid2>
         </Box>
