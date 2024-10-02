@@ -13,21 +13,21 @@ import Orders from "./pages/orders/Orders";
 import SupplierOrders from "./pages/supplierOrders/SupplierOrders";
 
 function ConsumerProtectedRoute({ user, redirectPath = "/" }) {
-    if (!user.type === "consumer")
+    if (user.type !== "consumer")
         return <Navigate to={redirectPath} replace />;
 
     return <Outlet />;
 }
 
 function SupplierProtectedRoute({ user, redirectPath = "/" }) {
-    if (!user.type === "supplier")
+    if (user.type !== "supplier")
         return <Navigate to={redirectPath} replace />;
 
     return <Outlet />;
 }
 
 function EmployeeProtectedRoute({ user, redirectPath = "/" }) {
-    if (!user.type === "employee")
+    if (user.type !== "employee")
         return <Navigate to={redirectPath} replace />;
 
     return <Outlet />;
