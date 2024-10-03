@@ -11,6 +11,7 @@ import Messages from "./pages/messages/Messages";
 import Account from "./pages/account/Account";
 import Orders from "./pages/orders/Orders";
 import SupplierOrders from "./pages/supplierOrders/SupplierOrders";
+import { useSelector } from "react-redux";
 
 function ConsumerProtectedRoute({ user, redirectPath = "/" }) {
     if (user.type !== "consumer")
@@ -35,7 +36,7 @@ function EmployeeProtectedRoute({ user, redirectPath = "/" }) {
 
 function App() {
     // TODO: pull user.slice from redux store to validate navigation to private routes
-    let user = { type: "employee" };
+    const user = useSelector((state) => state.user);
 
     return (
         <>

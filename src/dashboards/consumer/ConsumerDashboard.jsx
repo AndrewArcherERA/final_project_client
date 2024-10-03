@@ -12,12 +12,13 @@ import {
     Typography,
 } from "@mui/material";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 function ConsumerDashboard() {
     const [state, setState] = useState({
         right: false,
     });
+    const {company_name, f_name, l_name} = useSelector((state) => state.user.data)
 
     // TODO: Write logic for sending axios call to send order
 
@@ -44,7 +45,7 @@ function ConsumerDashboard() {
             </Typography>
             <List>
                 <ListItem>
-                    <Typography>Company Name</Typography>
+                    <Typography variant="h4">Welcome {f_name} {l_name}</Typography>
                 </ListItem>
                 <Divider />
                 <ListItem>
@@ -74,7 +75,7 @@ function ConsumerDashboard() {
         <Box>
             <Grid2 container px={3} py={1} borderBottom={2}>
                 <Grid2 item size={2}>
-                    <Typography variant="h4">Company Name</Typography>
+                    <Typography variant="h4">{company_name}</Typography>
                 </Grid2>
                 <Grid2 item size={8}>
                     <nav className={styles.nav}>

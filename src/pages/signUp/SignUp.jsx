@@ -12,13 +12,11 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./signUp.module.scss";
-import bcrypt from 'bcryptjs';
 import axios from 'axios';
 
 function SignUp() {
     const [userType, setUserType] = useState("consumer");
     const navigate = useNavigate();
-    const salt = bcrypt.genSaltSync(10)
 
     function handleUserTypeChange(e) {
         setUserType(e.target.value);
@@ -26,12 +24,11 @@ function SignUp() {
 
     async function registerUser(e) {
         e.preventDefault();
-        const password = bcrypt.hashSync(e.target[3].value, salt);
         let newUser = {
             f_name: e.target[0].value,
             l_name: e.target[1].value,
             email: e.target[2].value,
-            password: password,
+            password: e.target[3].value,
             phone: e.target[4].value,
             company_name: e.target[5].value,
             industry_clusters: [],
