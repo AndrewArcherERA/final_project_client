@@ -23,3 +23,34 @@
 .link:hover {
     color: #42a5f5
 }
+
+.passWordModel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.passWordModelBox {
+    width: 500px;
+    height: 120px;
+    background-color: rgb(255, 255, 255);
+    padding: 12px;
+    border-radius: 5px;
+
+}
+
+.passform {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    height: 100%;
+}
+
+.infoModal {
+    width: 600px;
+    background-color: rgb(255, 255, 255);
+    padding: 12px;
+    border-radius: 5px;
+
+}
