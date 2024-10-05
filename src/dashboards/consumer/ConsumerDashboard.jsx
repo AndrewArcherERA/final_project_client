@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import styles from "../dashboardStyles.module.scss";
 import {
@@ -19,18 +19,31 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import { updateUserInfo } from "../../features/user/userSlice";
+import Accordion from "@mui/material/Accordion";
+import AccordionActions from "@mui/material/AccordionActions";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import { MdOutlineExpandMore } from "react-icons/md";
 
 function ConsumerDashboard() {
     const dispatch = useDispatch();
     const [state, setState] = useState({
         right: false,
     });
+
+    //State to handle open/close of modals/drawers
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [infoModal, setInfoModal] = useState(false);
     const handleOpenInfo = () => setInfoModal(true);
     const handleCloseInfo = () => setInfoModal(false);
+    const [newLocationModal, setNewLocationModal] = useState(false);
+    const handleOpenNewLocation = () => setNewLocationModal(true);
+    const handleCloseNewLocation = () => setNewLocationModal(false);
+    const [updateLocationModal, setupdateLocationModal] = useState(false);
+    const handleOpenupdateLocation = () => setupdateLocationModal(true);
+    const handleCloseupdateLocation = () => setupdateLocationModal(false);
     const { company_name, f_name, l_name, email, phone, id, token } =
         useSelector((state) => state.user.data);
     const { type } = useSelector((state) => state.user);
@@ -47,6 +60,70 @@ function ConsumerDashboard() {
     const [userComapany, setUserCompany] = useState(company_name);
     const handleCompanyChange = (e) => setUserCompany(e.target.value);
 
+    const [stores, setStores] = useState([]);
+
+    async function getStores() {
+        const config = {
+            headers: { Authorization: token },
+        };
+        const url = `http://localhost:8080/consumerStore/getStores/${id}`;
+        let response = await axios.get(url, config);
+        setStores(response.data);
+    }
+// TODO: Pull store location accordian into seperate component with own state
+    const [lstoreName, setStoreName] = useState();
+    const handleStoreName = (e) => setStoreName(e.target.value);
+    const [lf_name, setf_name] = useState();
+    const handlefname = (e) => setf_name(e.target.value);
+    const [ll_name, setl_name] = useState();
+    const handlelname = (e) => setl_name(e.target.value);
+    const [lemail, setemail] = useState();
+    const handleemail = (e) => setemail(e.target.value);
+    const [lphone, setphone] = useState();
+    const handlephone = (e) => setphone(e.target.value);
+    const [lstreet, setStreet] = useState();
+    const handleStreet = (e) => setStreet(e.target.value);
+    const [lcity, setcity] = useState();
+    const handleCity = (e) => setcity(e.target.value);
+    const [lstate, setstate] = useState();
+    const handleState = (e) => setstate(e.target.value);
+    const [lzip, setzip] = useState();
+    const handleZip = (e) => setzip(e.target.value);
+    const [pass, setPassword] = useState();
+    const handlePass = (e) => setPassword(e.target.value);
+
+    async function handleUpdateLocation(e) {}
+
+    async function handleCreateStore(e) {
+        e.preventDefault();
+        const salt = bcrypt.genSaltSync(10);
+        const pass = bcrypt.hashSync(e.target[8].value, salt);
+        const config = {
+            headers: { Authorization: token },
+        };
+        const body = {
+            store: {
+                consumer_id: id,
+                store_name: e.target[0].value,
+                street_address: e.target[1].value,
+                city: e.target[2].value,
+                state: e.target[3].value,
+                zip: e.target[4].value,
+            },
+            manager: {
+                f_name: e.target[5].value,
+                l_name: e.target[6].value,
+                email: e.target[7].value,
+                password: pass,
+                phone: e.target[9].value,
+            },
+        };
+        const url = `http://localhost:8080/consumerStore/createStore`;
+        let response = await axios.post(url, body, config);
+        setStores([...stores, response.data]);
+        handleCloseNewLocation();
+    }
+
     async function handleUpdateInfo(e) {
         e.preventDefault();
         const data = {
@@ -57,8 +134,8 @@ function ConsumerDashboard() {
             company_name: e.target[4].value,
             token: token,
             user_type: type,
-            userID: id
-        }
+            userID: id,
+        };
         await dispatch(updateUserInfo(data)).then(function () {
             alert("User info updated succesfully");
             handleCloseInfo();
@@ -104,6 +181,11 @@ function ConsumerDashboard() {
             console.log(error);
         }
     }
+
+    //gets all stores
+    useEffect(() => {
+        getStores();
+    }, []);
 
     // TODO: Pass in data for fields (product name, individual/unit price, numPerUnit, NumUnitsAvail, image)
     const accountDrawer = (anchor) => (
@@ -207,7 +289,9 @@ function ConsumerDashboard() {
                                                     fullWidth
                                                     type="text"
                                                     value={firstName}
-                                                    onChange={handleFirstNameChange}
+                                                    onChange={
+                                                        handleFirstNameChange
+                                                    }
                                                 />
                                             </Grid2>
                                             <Grid2 item size={6}>
@@ -220,7 +304,9 @@ function ConsumerDashboard() {
                                                     fullWidth
                                                     type="text"
                                                     value={lastName}
-                                                    onChange={handleLastNameChange}
+                                                    onChange={
+                                                        handleLastNameChange
+                                                    }
                                                 />
                                             </Grid2>
                                             <Grid2 item size={6}>
@@ -281,16 +367,594 @@ function ConsumerDashboard() {
                 </ListItem>
                 <Divider />
                 <ListItem>
-                    <Typography>Store Locations</Typography>
+                    <Box width={"100%"}>
+                        <Box display={"flex"} justifyContent={"space-between"}>
+                            <Modal
+                                open={newLocationModal}
+                                onClose={handleCloseNewLocation}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                                className={styles.passWordModel}
+                            >
+                                <Box className={styles.infoModal}>
+                                    <form
+                                        onSubmit={(e) => handleCreateStore(e)}
+                                    >
+                                        <Grid2 container rowSpacing={1}>
+                                            <Grid2
+                                                item
+                                                size={12}
+                                                borderBottom={1}
+                                            >
+                                                <Typography variant="h6">
+                                                    Location Information
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Location Name:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Street Address:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    City:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    State:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Zip:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2
+                                                item
+                                                size={12}
+                                                borderBottom={1}
+                                            >
+                                                <Typography variant="h6">
+                                                    Store Manager Account
+                                                    Information
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    First Name:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Last Name:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Email:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Password:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Typography variant="h6">
+                                                    Phone:
+                                                </Typography>
+                                            </Grid2>
+                                            <Grid2 item size={6}>
+                                                <Input fullWidth type="text" />
+                                            </Grid2>
+                                            <Grid2 item size={12}>
+                                                <Button type="submit" fullWidth>
+                                                    Create Store
+                                                </Button>
+                                            </Grid2>
+                                        </Grid2>
+                                    </form>
+                                </Box>
+                            </Modal>
+                            <Typography variant="h5">
+                                Store Locations
+                            </Typography>
+                            <Button onClick={handleOpenNewLocation}>
+                                Add Store Location
+                            </Button>
+                        </Box>
+                        {stores.length > 0
+                            ? stores.map((store) => {
+                                  return (
+                                      <Accordion key={store.store.id}>
+                                          <AccordionSummary
+                                              expandIcon={
+                                                  <MdOutlineExpandMore />
+                                              }
+                                              aria-controls="panel1-content"
+                                              id="panel1-header"
+                                          >
+                                              <Typography variant="h6">
+                                                  {store.store.name}
+                                              </Typography>
+                                          </AccordionSummary>
+                                          <AccordionDetails>
+                                              <Grid2 container>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          Store Manager:
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.manager.f_name}{" "}
+                                                          {store.manager.l_name}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}></Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.manager.email}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}></Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.manager.phone}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2
+                                                      item
+                                                      size={12}
+                                                      my={1}
+                                                      borderBottom={1}
+                                                  >
+                                                      <Typography>
+                                                          Address
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          Street:
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {
+                                                              store.store
+                                                                  .street_address
+                                                          }
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          City:
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.store.city}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          State:
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.store.state}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          Zip:
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={6}>
+                                                      <Typography>
+                                                          {store.store.zip}
+                                                      </Typography>
+                                                  </Grid2>
+                                                  <Grid2 item size={12} mt={1}>
+                                                      <Box display={"flex"}>
+                                                          <Modal
+                                                              open={
+                                                                  updateLocationModal
+                                                              }
+                                                              onClose={
+                                                                  handleCloseupdateLocation
+                                                              }
+                                                              aria-labelledby="modal-modal-title"
+                                                              aria-describedby="modal-modal-description"
+                                                              className={
+                                                                  styles.passWordModel
+                                                              }
+                                                          >
+                                                              <Box
+                                                                  className={
+                                                                      styles.infoModal
+                                                                  }
+                                                              >
+                                                                  <form
+                                                                      onSubmit={(
+                                                                          e
+                                                                      ) =>
+                                                                          handleUpdateLocation(
+                                                                              e
+                                                                          )
+                                                                      }
+                                                                  >
+                                                                      <Grid2
+                                                                          container
+                                                                          rowSpacing={
+                                                                              1
+                                                                          }
+                                                                      >
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  12
+                                                                              }
+                                                                              borderBottom={
+                                                                                  1
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Location
+                                                                                  Information
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Location
+                                                                                  Name:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.store.name}
+                                                                                  value={
+                                                                                      lstoreName
+                                                                                  }
+                                                                                  onChange={(e) => handleStoreName(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Street
+                                                                                  Address:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.store.street_address}
+                                                                                  value={
+                                                                                      lstreet
+                                                                                  }
+                                                                                  onChange={(e) => handleStreet(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  City:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.store.city}
+                                                                                  value={
+                                                                                      lcity
+                                                                                  }
+                                                                                  onChange={(e) => handleCity(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  State:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.store.state}
+                                                                                  value={
+                                                                                      lstate
+                                                                                  }
+                                                                                  onChange={(e) => handleState(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Zip:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.store.zip}
+                                                                                  value={
+                                                                                      lzip
+                                                                                  }
+                                                                                  onChange={(e) => handleZip(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  12
+                                                                              }
+                                                                              borderBottom={
+                                                                                  1
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Store
+                                                                                  Manager
+                                                                                  Account
+                                                                                  Information
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  First
+                                                                                  Name:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.manager.f_name}
+                                                                                  value={
+                                                                                      lf_name
+                                                                                  }
+                                                                                  onChange={(e) => handlefname(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Last
+                                                                                  Name:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.manager.l_name}
+                                                                                  value={
+                                                                                      ll_name
+                                                                                  }
+                                                                                  onChange={(e) => handlelname(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Email:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.manager.email}
+                                                                                  value={
+                                                                                      lemail
+                                                                                  }
+                                                                                  onChange={(e) => handleemail(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Password:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  value={pass}
+                                                                                  onChange={(e) => handlePass(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Typography variant="h6">
+                                                                                  Phone:
+                                                                              </Typography>
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  6
+                                                                              }
+                                                                          >
+                                                                              <Input
+                                                                                  fullWidth
+                                                                                  type="text"
+                                                                                  defaultValue={store.manager.phone}
+                                                                                  value={
+                                                                                      lphone
+                                                                                  }
+                                                                                  onChange={(e) => handlephone(e)}
+                                                                              />
+                                                                          </Grid2>
+                                                                          <Grid2
+                                                                              item
+                                                                              size={
+                                                                                  12
+                                                                              }
+                                                                          >
+                                                                              <Button
+                                                                                  type="submit"
+                                                                                  fullWidth
+                                                                              >
+                                                                                  Update
+                                                                                  Store
+                                                                              </Button>
+                                                                          </Grid2>
+                                                                      </Grid2>
+                                                                  </form>
+                                                              </Box>
+                                                          </Modal>
+                                                          <Button fullWidth onClick={handleOpenupdateLocation}>
+                                                              Update Location
+                                                              Info
+                                                          </Button>
+                                                          <Button
+                                                              fullWidth
+                                                              color="error"
+                                                          >
+                                                              Delete Location
+                                                          </Button>
+                                                      </Box>
+                                                  </Grid2>
+                                              </Grid2>
+                                          </AccordionDetails>
+                                      </Accordion>
+                                  );
+                              })
+                            : null}
+                    </Box>
                 </ListItem>
                 <Divider />
-                <ListItem>
-                    <Typography>Add Store Location</Typography>
-                </ListItem>
-                <Divider />
-                <ListItem>
-                    <Typography>Warehouse Location</Typography>
-                </ListItem>
+                <ListItem>Warehouse</ListItem>
                 <Divider />
                 <ListItem>
                     <Typography>Logout</Typography>
