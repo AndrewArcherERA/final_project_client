@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styles from "./products.module.scss";
 import {
     Box,
@@ -11,7 +11,7 @@ import {
     ListItem,
     Typography,
 } from "@mui/material";
-import { FaImage } from "react-icons/fa";
+import {FaImage} from "react-icons/fa";
 
 function Products() {
     const [newProductState, setnewProductState] = useState({
@@ -20,8 +20,15 @@ function Products() {
 
     const toggleNewProduct = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
-            setnewProductState({ ...newProductState, [anchor]: open });
+            setnewProductState({...newProductState, [anchor]: open});
     };
+
+    function handleCreateProduct(e) {
+        e.preventDefault();
+
+
+        toggleNewProduct("right", false, true)
+    }
 
     const newProductlist = (anchor) => (
         <Box
@@ -31,7 +38,7 @@ function Products() {
             p={3}
         >
             <Typography
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
                 onClick={toggleNewProduct(anchor, false, true)}
                 variant="h3"
                 textAlign={"right"}
@@ -41,7 +48,7 @@ function Products() {
             <List>
                 {/* TODO: Map field variables passed in for individual product */}
                 <ListItem>
-                    <form>
+                    <form onSubmit={(e) => handleCreateProduct(e)}>
                         <Box
                             display={"flex"}
                             alignItems={"center"}
@@ -55,11 +62,11 @@ function Products() {
                                     alignItems={"center"}
                                     gap={3}
                                 >
-                                    <FaImage size={50} />
-                                    <Input type="file" />
+                                    <FaImage size={50}/>
+                                    <Input required type="file"/>
                                 </Box>
                                 <Box textAlign={"center"}>
-                                    <Input placeholder="Enter product name" />
+                                    <Input required placeholder="Enter product name"/>
                                 </Box>
                                 <Grid2 container>
                                     <Grid2 borderBottom={1} item size={6}>
@@ -77,7 +84,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input placeholder="Enter quanity" />
+                                        <Input required placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -94,7 +101,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input placeholder="Enter quanity" />
+                                        <Input required placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -111,7 +118,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input placeholder="Enter quanity" />
+                                        <Input required placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -128,30 +135,25 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input placeholder="Enter quanity" />
+                                        <Input required placeholder="Enter quanity"/>
                                     </Grid2>
                                 </Grid2>
                             </Box>
                         </Box>
+                        <Grid2 container gap={2} size={12} mt={3}>
+                            <Grid2
+                                item
+                                size={12}
+                                justifyContent={"center"}
+                                display={"flex"}
+                            >
+                                <Button variant="contained" type='submit'>Create Product</Button>
+                            </Grid2>
+                        </Grid2>
                     </form>
                 </ListItem>
             </List>
-            <Divider />
-            <List>
-                {/* TODO: calculate total price for order, order button here */}
-                <ListItem>
-                    <Grid2 container gap={2} size={12}>
-                        <Grid2
-                            item
-                            size={12}
-                            justifyContent={"center"}
-                            display={"flex"}
-                        >
-                            <Button variant="contained">Create Product</Button>
-                        </Grid2>
-                    </Grid2>
-                </ListItem>
-            </List>
+            <Divider/>
         </Box>
     );
     return (
@@ -248,7 +250,7 @@ function Products() {
 
                 <div className={styles.productContainer}>
                     {/* TODO: Map products */}
-                    <Product />
+                    <Product/>
                 </div>
             </div>
         </div>
@@ -262,7 +264,7 @@ function Product() {
 
     const toggleEditDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
-            setEditState({ ...editState, [anchor]: open });
+            setEditState({...editState, [anchor]: open});
     };
 
     const editlist = (anchor, pricePerItem, itemsPerUnit, pricePerUnit) => (
@@ -273,7 +275,7 @@ function Product() {
             p={3}
         >
             <Typography
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
                 onClick={toggleEditDrawer(anchor, false, true)}
                 variant="h3"
                 textAlign={"right"}
@@ -319,7 +321,7 @@ function Product() {
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Input value={"$5.35"} />
+                                    <Input value={"$5.35"}/>
                                 </Grid2>
                                 <Grid2 item size={6} borderBottom={1}>
                                     <Typography variant="h6" fontWeight={600}>
@@ -333,7 +335,7 @@ function Product() {
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Input value={"100"} />
+                                    <Input value={"100"}/>
                                 </Grid2>
                                 <Grid2 item size={6} borderBottom={1}>
                                     <Typography variant="h6" fontWeight={600}>
@@ -347,14 +349,14 @@ function Product() {
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Input value={"$500.35"} />
+                                    <Input value={"$500.35"}/>
                                 </Grid2>
                             </Grid2>
                         </Box>
                     </Box>
                 </ListItem>
             </List>
-            <Divider />
+            <Divider/>
             <List>
                 {/* TODO: calculate total price for order, order button here */}
                 <ListItem>
@@ -379,7 +381,7 @@ function Product() {
 
     const toggleStockDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
-            setStockState({ ...stockState, [anchor]: open });
+            setStockState({...stockState, [anchor]: open});
     };
 
     const stocklist = (anchor, pricePerItem, itemsPerUnit, pricePerUnit) => (
@@ -390,7 +392,7 @@ function Product() {
             p={3}
         >
             <Typography
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
                 onClick={toggleStockDrawer(anchor, false, true)}
                 variant="h3"
                 textAlign={"right"}
@@ -422,7 +424,7 @@ function Product() {
                                 justifyContent={"flex-end"}
                                 borderBottom={1}
                             >
-                                <Input value={"240"} />
+                                <Input value={"240"}/>
                             </Grid2>
                             <Grid2 item size={6} borderBottom={1}>
                                 <Typography variant="h6" fontWeight={600}>
@@ -436,13 +438,13 @@ function Product() {
                                 justifyContent={"flex-end"}
                                 borderBottom={1}
                             >
-                                <Input />
+                                <Input/>
                             </Grid2>
                         </Grid2>
                     </Box>
                 </ListItem>
             </List>
-            <Divider />
+            <Divider/>
             <List>
                 {/* TODO: calculate total price for order, order button here */}
                 <ListItem>

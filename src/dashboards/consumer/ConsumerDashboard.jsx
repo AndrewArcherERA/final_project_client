@@ -20,7 +20,6 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import { updateUserInfo } from "../../features/user/userSlice";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdOutlineExpandMore } from "react-icons/md";
