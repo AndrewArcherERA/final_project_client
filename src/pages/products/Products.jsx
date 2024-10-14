@@ -85,9 +85,9 @@ function Products() {
         getAllProducts()
     }, []);
 
-    useEffect(() => {
-        console.log(products)
-    }, [products]);
+    // useEffect(() => {
+    //     console.log(products)
+    // }, [products]);
 
     const newProductlist = (anchor) => (
         <Box
@@ -337,84 +337,6 @@ function Product({
             setStockState({...stockState, [anchor]: open});
     };
 
-    const stocklist = (anchor, pricePerItem, itemsPerUnit, pricePerUnit) => (
-        <Box
-            width={500}
-            role="presentation"
-            onKeyDown={toggleStockDrawer(anchor, false)}
-            p={3}
-        >
-            <Typography
-                sx={{cursor: "pointer"}}
-                onClick={toggleStockDrawer(anchor, false, true)}
-                variant="h3"
-                textAlign={"right"}
-            >
-                X
-            </Typography>
-            <List>
-                {/* TODO: Map field variables passed in for individual product */}
-                {/* TODO: Assign values for for inputs to state, onchange update state, onSubmit update product */}
-                <ListItem>
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        flexDirection={"column"}
-                        minWidth={"100%"}
-                        gap={3}
-                    >
-                        <Typography variant="h5">Product Name</Typography>
-                        <Grid2 container>
-                            <Grid2 item size={6} borderBottom={1}>
-                                <Typography variant="h6" fontWeight={600}>
-                                    Current Stock:
-                                </Typography>
-                            </Grid2>
-                            <Grid2
-                                item
-                                size={6}
-                                display={"flex"}
-                                justifyContent={"flex-end"}
-                                borderBottom={1}
-                            >
-                                <Input value={"240"}/>
-                            </Grid2>
-                            <Grid2 item size={6} borderBottom={1}>
-                                <Typography variant="h6" fontWeight={600}>
-                                    Updated Stock:
-                                </Typography>
-                            </Grid2>
-                            <Grid2
-                                item
-                                size={6}
-                                display={"flex"}
-                                justifyContent={"flex-end"}
-                                borderBottom={1}
-                            >
-                                <Input/>
-                            </Grid2>
-                        </Grid2>
-                    </Box>
-                </ListItem>
-            </List>
-            <Divider/>
-            <List>
-                {/* TODO: calculate total price for order, order button here */}
-                <ListItem>
-                    <Grid2 container width={"100%"}>
-                        <Grid2
-                            item
-                            size={12}
-                            justifyContent={"center"}
-                            display={"flex"}
-                        >
-                            <Button variant="contained">Update</Button>
-                        </Grid2>
-                    </Grid2>
-                </ListItem>
-            </List>
-        </Box>
-    );
     return (
         <div className={styles.prodcut}>
             <Grid2
@@ -457,7 +379,7 @@ function Product({
                         open={stockState["right"]}
                         onClose={toggleStockDrawer("right", false)}
                     >
-                        {stocklist("right")}
+                        {StockList("right", stock, product_id, products, setProducts, token, toggleStockDrawer, setStockState)}
                     </Drawer>
                     <Box
                         display={"flex"}
@@ -483,6 +405,125 @@ function Product({
         </div>
     );
 }
+
+function StockList(anchor, currentStock, product_id, products, setProducts, token, toggleStockDrawer, setStockState) {
+    async function handleRefillStock(e) {
+        e.preventDefault();
+        try {
+            const data = {
+                product_id: product_id,
+                updated_stock: e.target[0].value
+            }
+
+            await axios.put(
+                "http://localhost:8080/products/updateStock",
+                data,
+                {
+                    headers: {
+                        Authorization: token,
+                    },
+                }
+            );
+
+            let updated = products.map((prod) => {
+                if (prod.id === product_id)
+                    return prod = {
+                        ...prod,
+                        num_units_available: e.target[0].value
+                    }
+                else return prod;
+            })
+            setProducts(updated);
+            setStockState({right: false})
+            alert('Stock updated successfully');
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    function handleChange(e) {
+        if (e.target.value < 0) e.target.value = 0
+    }
+
+    return (<Box
+        width={500}
+        role="presentation"
+        onKeyDown={toggleStockDrawer("right", false)}
+        p={3}
+    >
+        <Typography
+            sx={{cursor: "pointer"}}
+            onClick={toggleStockDrawer("right", false, true)}
+            variant="h3"
+
+            textAlign={"right"}
+        >
+            X
+        </Typography>
+        <form onSubmit={(e) => handleRefillStock(e)}>
+            <List>
+                {/* TODO: Map field variables passed in for individual product */}
+                {/* TODO: Assign values for for inputs to state, onchange update state, onSubmit update product */}
+                <ListItem>
+                    <Box
+                        display={"flex"}
+                        alignItems={"center"}
+                        flexDirection={"column"}
+                        minWidth={"100%"}
+                        gap={3}
+                    >
+                        <Typography variant="h5">Product Name</Typography>
+                        <Grid2 container>
+                            <Grid2 item size={6}>
+                                <Typography variant="h6" fontWeight={600}>
+                                    Current Stock:
+                                </Typography>
+                            </Grid2>
+                            <Grid2
+                                item
+                                size={6}
+                                display={"flex"}
+                                justifyContent={"flex-end"}
+                            >
+                                <Typography>{currentStock}</Typography>
+                            </Grid2>
+                            <Grid2 item size={6}>
+                                <Typography variant="h6" fontWeight={600}>
+                                    Updated Stock:
+                                </Typography>
+                            </Grid2>
+                            <Grid2
+                                item
+                                size={6}
+                                display={"flex"}
+                                justifyContent={"flex-end"}
+                            >
+                                <Input type={"number"} onChange={(e) => handleChange(e)}
+                                       className={styles.updateStockInput}/>
+                            </Grid2>
+                        </Grid2>
+                    </Box>
+                </ListItem>
+            </List>
+            <Divider/>
+            <List>
+                {/* TODO: calculate total price for order, order button here */}
+                <ListItem>
+                    <Grid2 container width={"100%"}>
+                        <Grid2
+                            item
+                            size={12}
+                            justifyContent={"center"}
+                            display={"flex"}
+                        >
+                            <Button variant="contained" type={'submit'}>Update</Button>
+                        </Grid2>
+                    </Grid2>
+                </ListItem>
+            </List>
+        </form>
+    </Box>)
+};
 
 
 function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, toggleEditDrawer, product_id, products, setProducts, token) {
