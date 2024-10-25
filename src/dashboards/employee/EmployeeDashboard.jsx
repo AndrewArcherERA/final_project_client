@@ -41,11 +41,18 @@ function EmployeeDashboard() {
                     <div>
                         <Typography variant={'h5'}>{user.data.company_name}</Typography>
                         <Typography variant={'h6'}>{user.data.storeName}</Typography>
+                        <div>
+                            <Typography>{user.data.street_address} {user.data.city} {user.data.state} {user.data.zip}</Typography>
+                        </div>
                     </div>
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <Typography>Account Info</Typography>
+                    <Box>
+                        <Typography>{user.data.f_name} {user.data.l_name}</Typography>
+                        <Typography>{user.data.email}</Typography>
+                        <Typography>{user.data.phone}</Typography>
+                    </Box>
                 </ListItem>
                 <Divider/>
                 <Button fullWidth color="error" onClick={handleLogout}>

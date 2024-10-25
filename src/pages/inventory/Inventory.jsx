@@ -28,6 +28,7 @@ function Inventory({userType}) {
             }
             const url = `http://localhost:8080/inventory/getInventory/${userType}/${user.data.warehouse_id ? user.data.warehouse_id : user.data.store_id}`;
             axios.get(url, config).then((res) => {
+                console.log(res)
                 setInventory([res.data]);
             })
         } catch (error) {
@@ -61,25 +62,28 @@ function Inventory({userType}) {
                     bgcolor={"white"}
                 >
                     {userType === "consumer" ? (
-                        [inventory[0] ? inventory[0].map((product) => {
+                        [inventory[0] ? inventory[0].map((product, index) => {
                             return (
-                                <ConsumerProduct image={product.link} name={product.name} inStock={product.quantity}
+                                <ConsumerProduct image={product.link} name={product.name} inStock={product?.quantity}
                                                  supplierName={product.company_name}
                                                  nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
                                                  nextDeliveryQuantity={product.incomingShipment?.quantity}
                                                  storeStocks={product.store_quantities}
+                                                 key={index}
+                                                 id={product.id}
                                 />
                             )
                         }) : 'Loading...']
                     ) : (
-                        [inventory[0] ? inventory[0].map((product) => {
+                        [inventory[0] ? inventory[0].map((product, index) => {
                             return (
-                                <EmployeeProduct image={product.link} name={product.name} inStock={product.quantity}
+                                <EmployeeProduct image={product.link} name={product.name} inStock={product?.quantity}
                                                  supplierName={product.company_name}
                                                  nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
                                                  nextDeliveryQuantity={product.incomingShipment?.quantity}
                                                  storeStocks={product.store_quantities}
-                                                 warehouseStock={product.warehouse_quantity.quantity}
+                                                 warehouseStock={product.warehouse_quantity?.quantity}
+                                                 key={index}
                                 />
                             )
                         }) : 'Loading...']

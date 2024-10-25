@@ -15,7 +15,7 @@ function ConsumerHeader() {
                 <Grid2 item size={2} textAlign={"center"}>
                     Supplier Name
                 </Grid2>
-                <Grid2 item size={1} textAlign={"center"}>
+                <Grid2 item size={2} textAlign={"center"}>
                     Store Stock
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>

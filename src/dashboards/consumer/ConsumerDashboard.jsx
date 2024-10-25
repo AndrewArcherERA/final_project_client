@@ -314,11 +314,6 @@ function ConsumerDashboard() {
         getWarehouses();
     }, []);
 
-    useEffect(() => {
-        console.log(deliveryLocation.type)
-    }, [deliveryLocation]);
-
-
     const accountDrawer = (anchor) => (
         <Box
             width={500}
