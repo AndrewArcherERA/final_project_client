@@ -1,26 +1,40 @@
-import { Box, Input, InputLabel, MenuItem, Select } from "@mui/material";
-import React, { useState } from "react";
+import {Box, Input} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import ConsumerHeader from "../../components/consumerInventory/consumerInventory/ConsumerHeader";
 import ConsumerProduct from "../../components/consumerInventory/consumerInventory/ConsumerProduct";
 import EmployeeHeader from "../../components/employeeInventory/EmployeeHeader";
 import EmployeeProduct from "../../components/employeeInventory/EmployeeProduct";
-import { blue } from "@mui/material/colors";
+import {blue} from "@mui/material/colors";
+import {useSelector} from "react-redux";
+import axios from "axios";
 
-function Inventory({ userType }) {
-    const [location, setLoctation] = useState("Warehouse");
+function Inventory({userType}) {
     const [inventory, setInventory] = useState([]);
-    const [locations, setLocations] = useState([]);
+    const user = useSelector(state => state.user);
 
-    async function getLocations() {
-        // TODO: Makes axios request to API to get list of store locations and warehouse location
-    }
-    async function getInventory(location) {
-        // TODO: Makes axios request to API to get inventory for specific location
+    useEffect(() => {
+        getInventory()
+    }, []);
+    useEffect(() => {
+        console.log(inventory[0])
+    }, [inventory]);
+
+    async function getInventory() {
+        try {
+            const config = {
+                headers: {
+                    Authorization: user.data.token
+                }
+            }
+            const url = `http://localhost:8080/inventory/getInventory/${userType}/${user.data.warehouse_id ? user.data.warehouse_id : user.data.store_id}`;
+            axios.get(url, config).then((res) => {
+                setInventory([res.data]);
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
-    function handleLocationChnage(e) {
-        setLoctation(e.target.value);
-    }
     return (
         <Box>
             <Box
@@ -28,44 +42,47 @@ function Inventory({ userType }) {
                 justifyContent={"space-between"}
                 alignItems={"center"}
             >
-                <Box>
-                    <InputLabel>Location</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={location}
-                        label="Age"
-                        onChange={(e) => handleLocationChnage(e)}
-                    >
-                        {/* TODO: Map MenuItems with locations */}
-                        <MenuItem value={"Warehouse"}>Main</MenuItem>
-                        <MenuItem value={"store1"}>Store 1</MenuItem>
-                        <MenuItem value={"store2"}>Store 2</MenuItem>
-                    </Select>
-                </Box>
-                <Box>
-                    <Input type="text" placeholder="Search for product..." />
+                <Box mb={2}>
+                    <Input type="text" placeholder="Search for product..."/>
                 </Box>
             </Box>
-
             <Box width={"80vw"} border={2} py={2} bgcolor={blue[400]} borderRadius={2}>
                 {/* TODO: Map products */}
                 {userType === "consumer" ? (
-                    <ConsumerHeader />
+                    <ConsumerHeader/>
                 ) : (
-                    <EmployeeHeader />
+                    <EmployeeHeader/>
                 )}
                 <Box
                     borderTop={2}
                     height={"70vh"}
                     maxHeight={"70vh"}
-                    sx={{ overflowY: "scroll" }}
+                    sx={{overflowY: "scroll"}}
                     bgcolor={"white"}
                 >
                     {userType === "consumer" ? (
-                        <ConsumerProduct />
+                        [inventory[0] ? inventory[0].map((product) => {
+                            return (
+                                <ConsumerProduct image={product.link} name={product.name} inStock={product.quantity}
+                                                 supplierName={product.company_name}
+                                                 nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
+                                                 nextDeliveryQuantity={product.incomingShipment?.quantity}
+                                                 storeStocks={product.store_quantities}
+                                />
+                            )
+                        }) : 'Loading...']
                     ) : (
-                        <EmployeeProduct />
+                        [inventory[0] ? inventory[0].map((product) => {
+                            return (
+                                <EmployeeProduct image={product.link} name={product.name} inStock={product.quantity}
+                                                 supplierName={product.company_name}
+                                                 nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
+                                                 nextDeliveryQuantity={product.incomingShipment?.quantity}
+                                                 storeStocks={product.store_quantities}
+                                                 warehouseStock={product.warehouse_quantity.quantity}
+                                />
+                            )
+                        }) : 'Loading...']
                     )}
                 </Box>
             </Box>

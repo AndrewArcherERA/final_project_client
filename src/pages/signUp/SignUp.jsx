@@ -1,16 +1,11 @@
 import {
     Box,
     Button,
-    Checkbox,
-    ListItemText,
-    ListSubheader,
-    MenuItem,
-    Select,
     ToggleButton,
     ToggleButtonGroup,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import styles from "./signUp.module.scss";
 import axios from 'axios';
 
@@ -31,25 +26,23 @@ function SignUp() {
             password: e.target[3].value,
             phone: e.target[4].value,
             company_name: e.target[5].value,
-            industry_clusters: [],
             user_type: userType,
-            // TODO: handle indrustry clusteres input
         }
 
-        // TODO: URL
         const url = 'http://localhost:8080/auth/register'
         try {
             await axios.post(url, newUser).then(() => {
                 alert('Account registered succesfully!');
                 navigate('/');
             });
-        }catch (error) {
-            if(error.status === 400)
+        } catch (error) {
+            if (error.status === 400)
                 alert('Email already registered to another account')
             else if (error.status === 500)
                 alert('Our server seems to be having some issues. Please try again later.')
         }
     }
+
     return (
         <Box
             display={"flex"}
@@ -77,7 +70,7 @@ function SignUp() {
             >
                 <form className={styles.form} onSubmit={(e) => registerUser(e)}>
                     <label>First name</label>
-                    <input type="text" required />
+                    <input type="text" required/>
                     <label>Last name</label>
                     <input type="text" required/>
                     <label htmlFor="#email">Email</label>
@@ -88,56 +81,6 @@ function SignUp() {
                     <input type="tel" required/>
                     <label>Company name</label>
                     <input type="text" required/>
-
-                    {/* TODO: Query industry clusters */}
-                    <label>What industry/industries is your company in?</label>
-                    <Select
-                        defaultValue=""
-                        id="grouped-select"
-                        label="Grouping"
-                        multiple
-                        value={[]}
-                        sx={{ overflowY: "scroll" }}
-                    >
-                        <Box maxHeight={'300px'}>
-                          {/* TODO: Map industries */}
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                            <ListSubheader>Category 1</ListSubheader>
-                            <MenuItem key={""} value={""}>
-                                <Checkbox checked={""} />
-                                <ListItemText primary={"An industry"} />
-                            </MenuItem>
-                        </Box>
-                    </Select>
                     <Button type="submit">Submit form</Button>
                 </form>
             </Box>

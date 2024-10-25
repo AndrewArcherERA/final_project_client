@@ -1,32 +1,65 @@
-import { Box, Button, Grid2, Typography } from "@mui/material";
+import {Box, Button, Grid2, Input, Typography} from "@mui/material";
 import React from "react";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
-import { useState } from "react";
+import {useState} from "react";
+import styles from "../../pages/suppliers/suppliers.module.scss";
+import {useSelector} from "react-redux";
+import axios from "axios";
 
 function ConsumerProduct({
-    productID,
-    image,
-    pricePerProduct,
-    numProdPerUnit,
-    numUnitsAvail,
-    pricePerUnit,
-    orderProduct,
-}) {
+                             productID,
+                             image,
+                             pricePerProduct,
+                             numProdPerUnit,
+                             numUnitsAvail,
+                             pricePerUnit,
+                             name
+                         }) {
     const [state, setState] = useState({
         right: false,
     });
-
-    // TODO: Write logic for sending axios call to send order
+    const token = useSelector(state => state.user.data.token);
+    const id = useSelector(state => state.user.data.id);
 
     const toggleDrawer = (anchor, open, toggle) => (event) => {
 
-        if((event.type === 'keydown' && event.key === 'Esc') || toggle) setState({ ...state, [anchor]: open });
+        if ((event.type === 'keydown' && event.key === 'Esc') || toggle) setState({...state, [anchor]: open});
     };
 
-    // TODO: Pass in data for fields (product name, individual/unit price, numPerUnit, NumUnitsAvail, image)
+    async function addItemToCart(e) {
+        e.preventDefault();
+        const quantity = e.target[0].value;
+
+        try {
+            const config = {
+                headers: {
+                    Authorization: token
+                }
+            }
+            const url = 'http://localhost:8080/cart/addCartItem';
+            const data = {
+                userID: id,
+                productID: productID,
+                quantity: quantity
+            }
+            await axios.post(url, data, config).then(() => {
+                setState({...state, ['right']: false});
+                alert(`Added ${name} to cart`);
+            });
+        } catch (error) {
+            if (error.status === 400) {
+                alert('Item already in cart')
+                setState({...state, ['right']: false});
+                return
+            }
+            console.error(error.message)
+        }
+    }
+
+
     const list = (anchor) => (
         <Box
             width={500}
@@ -34,9 +67,9 @@ function ConsumerProduct({
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
         >
-            <Typography sx={{cursor: "pointer"}} onClick={toggleDrawer(anchor, false, true)} variant="h3" textAlign={'right'}>X</Typography>
+            <Typography sx={{cursor: "pointer"}} onClick={toggleDrawer(anchor, false, true)} variant="h3"
+                        textAlign={'right'}>X</Typography>
             <List>
-                {/* TODO: Map field variables passed in for individual product */}
                 <ListItem>
                     <Box
                         display={"flex"}
@@ -45,18 +78,15 @@ function ConsumerProduct({
                         minWidth={"100%"}
                     >
                         <Box
-                            width={"300px"}
-                            border={1}
-                            height={"300px"}
                             borderRadius={3}
                             overflow={"hidden"}
                         >
-                            {/* TODO: Image of product */}
+                            <img className={styles.productImage} src={image} alt={'product media'}/>
                         </Box>
                         <Box width={"100%"}>
                             <Box textAlign={"center"}>
                                 <Typography variant="h4">
-                                    Product Name
+                                    {name}
                                 </Typography>
                             </Box>
                             <Grid2 container>
@@ -72,7 +102,7 @@ function ConsumerProduct({
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Typography variant="h6">$5.35</Typography>
+                                    <Typography variant="h6">${pricePerProduct}</Typography>
                                 </Grid2>
                                 <Grid2 item size={6} borderBottom={1}>
                                     <Typography variant="h6" fontWeight={600}>
@@ -86,7 +116,7 @@ function ConsumerProduct({
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Typography variant="h6">100</Typography>
+                                    <Typography variant="h6">{numProdPerUnit}</Typography>
                                 </Grid2>
                                 <Grid2 item size={6} borderBottom={1}>
                                     <Typography variant="h6" fontWeight={600}>
@@ -101,8 +131,7 @@ function ConsumerProduct({
                                     borderBottom={1}
                                 >
                                     <Typography variant="h6">
-                                        {/* TODO: Calculate this, price per item * num items per unit */}
-                                        $500.35
+                                        {numProdPerUnit * pricePerProduct}
                                     </Typography>
                                 </Grid2>
                                 <Grid2 item size={6} borderBottom={1}>
@@ -117,62 +146,64 @@ function ConsumerProduct({
                                     justifyContent={"flex-end"}
                                     borderBottom={1}
                                 >
-                                    <Typography variant="h6">45</Typography>
+                                    <Typography variant="h6">{numUnitsAvail}</Typography>
                                 </Grid2>
                             </Grid2>
                         </Box>
                     </Box>
                 </ListItem>
             </List>
-            <Divider />
+            <Divider/>
             <List>
-                {/* TODO: calculate total price for order, order button here */}
-                <ListItem>
-                    <Grid2 container gap={2}>
-                        <Grid2 item size={12} display={'flex'} justifyContent={'space-between'}>
-                            <Typography variant="h6" fontWeight={600}>Order quantity (Units):</Typography>
-                            {/* TODO: Set max to num units in stock */}
-                            <input type="number" max={100} min={0} onChange={(e) => handleQuantity(e)} style={{fontSize: 'xl'}} placeholder={0}/>
+                <form onSubmit={(e) => addItemToCart(e)}>
+                    <ListItem>
+                        <Grid2 container gap={2}>
+                            <Grid2 item size={12} display={'flex'} justifyContent={'space-between'}>
+                                <Typography variant="h6" fontWeight={600}>Order quantity (Units):</Typography>
+                                <input type="number" defaultValue={1} max={numUnitsAvail} min={0}
+                                       onChange={(e) => handleQuantity(e)}
+                                       style={{fontSize: 'xl'}} placeholder={0}/>
+                            </Grid2>
+                            <Grid2 item size={12} justifyContent={"center"} display={"flex"}>
+                                <Button variant="contained" type='submit'>Add to cart</Button>
+                            </Grid2>
                         </Grid2>
-                        <Grid2 item size={12} display={'flex'} justifyContent={'space-between'}>
-                            <Typography variant="h6" fontWeight={600}>Total:</Typography>
-                            {/* TODO: Calc total price */}
-                            <Typography variant="h6" >Calc total price</Typography>
-                        </Grid2>
-                        <Grid2 item size={12} justifyContent={"center"} display={"flex"}>
-                            <Button variant="contained">Confirm Order</Button>
-                        </Grid2>
-                    </Grid2>
-                </ListItem>
+                    </ListItem>
+                </form>
             </List>
         </Box>
     );
 
     function handleQuantity(e) {
         let value = parseInt(e.target.value);
-        if(value > e.target.max) e.target.value = e.target.max;
-        else if(value < e.target.min) e.target.value = e.target.min;
+        if (value > e.target.max) e.target.value = e.target.max;
+        else if (value < e.target.min) e.target.value = e.target.min;
     }
 
     return (
-        <Box borderBottom={1} height={"100px"} p={1} textAlign={"center"}>
+        <Box borderBottom={1} height={'15vh'} textAlign={"center"}>
             <Grid2 container alignItems={"center"} height={"100%"}>
-                <Grid2 size={2} item>
-                    <Typography variant="h6">Image</Typography>
+                <Grid2 size={2} item className={styles.col}>
+                    <img className={styles.productImage} src={image} alt={'product media'}/>
                 </Grid2>
-                <Grid2 size={2} item>
-                    <Typography variant="h6">Price Per Product</Typography>
+                <Grid2 size={4} item className={styles.col}>
+                    <Typography>{name}</Typography>
                 </Grid2>
-                <Grid2 size={2} item>
-                    <Typography variant="h6">Num Products Per Unit</Typography>
+                <Grid2 size={1} item className={styles.col}>
+                    <Typography variant="h6">${pricePerProduct}</Typography>
                 </Grid2>
-                <Grid2 size={2} item>
-                    <Typography variant="h6">Num Units Avialable</Typography>
+                <Grid2 size={1} item className={styles.col}>
+                    <Typography variant="h6">{numProdPerUnit}</Typography>
                 </Grid2>
-                <Grid2 size={2} item>
-                    <Typography variant="h6">Price per unit</Typography>
+                <Grid2 size={1} item className={styles.col}>
+                    {numUnitsAvail > 0 ? (<Typography variant="h6">{numUnitsAvail}</Typography>) : (
+                        <Typography color={'grey'}>Out of Stock</Typography>)}
+
                 </Grid2>
-                <Grid2 size={2} item>
+                <Grid2 size={1} item className={styles.col}>
+                    <Typography variant="h6">${pricePerUnit}</Typography>
+                </Grid2>
+                <Grid2 size={2} item className={styles.col}>
                     <Drawer
                         anchor={"right"}
                         open={state["right"]}
@@ -180,13 +211,14 @@ function ConsumerProduct({
                     >
                         {list("right")}
                     </Drawer>
-                    <Box>
-                        <Button
+                    <Box display={'flex'} justifyContent={'space-around'} gap={5} p={2}>
+                        {numUnitsAvail > 0 ? (<Button
                             onClick={toggleDrawer("right", true, true)}
                             variant="contained"
+                            size={'small'}
                         >
-                            Order
-                        </Button>
+                            Add to cart
+                        </Button>) : (null)}
                     </Box>
                 </Grid2>
             </Grid2>

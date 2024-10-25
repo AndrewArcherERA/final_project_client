@@ -1,22 +1,26 @@
-import { Box, Divider, Drawer, Grid2, List, ListItem, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import {Box, Button, Divider, Drawer, Grid2, List, ListItem, Typography} from "@mui/material";
+import React, {useState} from "react";
+import {Link, Outlet} from "react-router-dom";
 import styles from "../dashboardStyles.module.scss";
-import { IoPersonCircleSharp } from "react-icons/io5";
+import {IoPersonCircleSharp} from "react-icons/io5";
+import {useSelector} from "react-redux";
+import {logout} from "../../features/user/userSlice";
+import {useDispatch} from "react-redux";
 
 function EmployeeDashboard() {
     const [state, setState] = useState({
         right: false,
     });
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
-    // TODO: Write logic for sending axios call to send order
+    const handleLogout = () => dispatch(logout());
 
     const toggleDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
-            setState({ ...state, [anchor]: open });
+            setState({...state, [anchor]: open});
     };
 
-    // TODO: Pass in data for fields (product name, individual/unit price, numPerUnit, NumUnitsAvail, image)
     const accountDrawer = (anchor) => (
         <Box
             width={500}
@@ -25,7 +29,7 @@ function EmployeeDashboard() {
             p={3}
         >
             <Typography
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
                 onClick={toggleDrawer(anchor, false, true)}
                 variant="h3"
                 textAlign={"right"}
@@ -34,27 +38,31 @@ function EmployeeDashboard() {
             </Typography>
             <List>
                 <ListItem>
-                    <Typography>Company Name</Typography>
+                    <div>
+                        <Typography variant={'h5'}>{user.data.company_name}</Typography>
+                        <Typography variant={'h6'}>{user.data.storeName}</Typography>
+                    </div>
                 </ListItem>
-                <Divider />
+                <Divider/>
                 <ListItem>
                     <Typography>Account Info</Typography>
                 </ListItem>
-                <Divider />
-                <ListItem>
-                    <Typography>Logout</Typography>
-                </ListItem>
-                <Divider />
+                <Divider/>
+                <Button fullWidth color="error" onClick={handleLogout}>
+                    Logout
+                </Button>
+                <Divider/>
             </List>
         </Box>
     );
     return (
         <>
             <Grid2 container px={3} py={1} borderBottom={2}>
-                <Grid2 item size={2}>
-                    <Typography variant="h4">Company Name</Typography>
+                <Grid2 item size={3}>
+                    <Typography variant={'h4'}>{user.data.company_name}</Typography>
+                    <Typography variant={'h5'}>{user.data.storeName}</Typography>
                 </Grid2>
-                <Grid2 item size={8}>
+                <Grid2 item size={7}>
                     <nav className={styles.nav}>
                         <Link to={""} className={styles.link}>
                             <Typography variant="h6">Inventory</Typography>
@@ -96,7 +104,7 @@ function EmployeeDashboard() {
                 display={"flex"}
                 className={styles.outletWrapper}
             >
-                <Outlet />
+                <Outlet/>
             </Box>
         </>
     );

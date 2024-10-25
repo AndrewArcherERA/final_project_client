@@ -1,9 +1,28 @@
 .cardWrapper {
-    overflow-y: scroll;
-    max-height: 100%;
+  overflow-y: scroll;
+  max-height: 100%;
 }
 
 .productWrapper {
-    overflow-y: scroll;
-    max-height: 100%;
+  overflow-y: scroll;
+  max-height: 100%;
+}
+
+.isSelected {
+  background-color: red;
+}
+
+.productImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.col {
+  border-right: 1px solid black;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }

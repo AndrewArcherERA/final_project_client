@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import SignIn from "./pages/signIn/SignIn";
 import SignUp from "./pages/signUp/SignUp";
 import ConsumerDashboard from "./dashboards/consumer/ConsumerDashboard";
@@ -11,75 +11,74 @@ import Messages from "./pages/messages/Messages";
 import Account from "./pages/account/Account";
 import Orders from "./pages/orders/Orders";
 import SupplierOrders from "./pages/supplierOrders/SupplierOrders";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
-function ConsumerProtectedRoute({ user, redirectPath = "/" }) {
+function ConsumerProtectedRoute({user, redirectPath = "/"}) {
     if (user.type !== "consumer")
-        return <Navigate to={redirectPath} replace />;
+        return <Navigate to={redirectPath} replace/>;
 
-    return <Outlet />;
+    return <Outlet/>;
 }
 
-function SupplierProtectedRoute({ user, redirectPath = "/" }) {
+function SupplierProtectedRoute({user, redirectPath = "/"}) {
     if (user.type !== "supplier")
-        return <Navigate to={redirectPath} replace />;
+        return <Navigate to={redirectPath} replace/>;
 
-    return <Outlet />;
+    return <Outlet/>;
 }
 
-function EmployeeProtectedRoute({ user, redirectPath = "/" }) {
+function EmployeeProtectedRoute({user, redirectPath = "/"}) {
     if (user.type !== "employee")
-        return <Navigate to={redirectPath} replace />;
+        return <Navigate to={redirectPath} replace/>;
 
-    return <Outlet />;
+    return <Outlet/>;
 }
 
 function App() {
-    // TODO: pull user.slice from redux store to validate navigation to private routes
     const user = useSelector((state) => state.user);
 
     return (
         <>
             <Routes>
-                <Route path="/" element={<SignIn />} />
-                <Route path="/signUp" element={<SignUp />} />
+                <Route path="/" element={<SignIn/>}/>
+                <Route path="/signUp" element={<SignUp/>}/>
 
-                <Route element={<ConsumerProtectedRoute user={user} />}>
+                <Route element={<ConsumerProtectedRoute user={user}/>}>
                     <Route
                         path="/consumerDashboard"
-                        element={<ConsumerDashboard />}
+                        element={<ConsumerDashboard/>}
                     >
                         <Route
                             index
-                            element={<Inventory userType={user.type} />}
+                            element={<Inventory userType={user.type}/>}
                         />
-                        <Route path={"suppliers"} element={<Suppliers />} />
-                        <Route path={"messages"} element={<Messages />} />
-                        <Route path={"orders"} element={<Orders />} />
+                        <Route path={"suppliers"} element={<Suppliers/>}/>
+                        <Route path={"messages"} element={<Messages/>}/>
+                        <Route path={"orders"} element={<Orders/>}/>
                     </Route>
                 </Route>
 
-                <Route element={<SupplierProtectedRoute user={user} />}>
+                <Route element={<SupplierProtectedRoute user={user}/>}>
                     <Route
                         path="/supplierDashboard"
-                        element={<SupplierDashboard />}
+                        element={<SupplierDashboard/>}
                     >
-                        <Route index element={<Products />} />
-                        <Route path={"messages"} element={<Messages />} />
-                        <Route path={"orders"} element={<SupplierOrders />} />
+                        <Route index element={<Products/>}/>
+                        <Route path={"messages"} element={<Messages/>}/>
+                        <Route path={"orders"} element={<SupplierOrders/>}/>
                     </Route>
                 </Route>
-                <Route element={<EmployeeProtectedRoute user={user} />}>
+                <Route element={<EmployeeProtectedRoute user={user}/>}>
                     <Route
                         path="/employeeDashboard"
-                        element={<EmployeeDashboard />}
+                        element={<EmployeeDashboard/>}
                     >
                         <Route
                             index
-                            element={<Inventory userType={user.type} />}
+                            element={<Inventory userType={user.type}/>}
                         />
-                        <Route path={"messages"} element={<Messages />} />
-                        <Route path={"orders"} element={<Orders />} />
+                        <Route path={"messages"} element={<Messages/>}/>
+                        <Route path={"orders"} element={<Orders/>}/>
                     </Route>
                 </Route>
             </Routes>
