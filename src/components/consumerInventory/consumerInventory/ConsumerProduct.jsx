@@ -141,9 +141,9 @@ function ConsumerProduct({
         getStores();
     }, []);
     return (
-        <Box borderBottom={2}>
-            <Grid2 container height={'100%'} display={"flex"} alignItems={'center'}>
-                <Grid2 className={styles.col} item size={2} textAlign={"center"}>
+        <Box className={styles.productWrapper}>
+            <Grid2 container height={'100%'} display={"flex"} alignItems={'center'} size={12}>
+                <Grid2 className={styles.col} p={1} item size={2} textAlign={"center"}>
                     <img src={image} className={styles.image} alt={'image'}/>
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
@@ -182,7 +182,9 @@ function ConsumerProduct({
                     >
                         {cartDrawer("right", name, inStock)}
                     </Drawer>
-                    <Button onClick={toggleCartDrawer("right", true, true)}>Resupply Store</Button>
+                    <Button onClick={toggleCartDrawer("right", true, true)} color={'success'} variant={'contained'}
+                            size={'small'}>Resupply
+                        Store</Button>
                 </Grid2>
             </Grid2>
         </Box>

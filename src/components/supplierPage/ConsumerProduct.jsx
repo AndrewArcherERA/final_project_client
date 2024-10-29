@@ -66,6 +66,9 @@ function ConsumerProduct({
             role="presentation"
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
+            bgcolor={'#001539'}
+            height={'100%'}
+            color={'whitesmoke'}
         >
             <Typography sx={{cursor: "pointer"}} onClick={toggleDrawer(anchor, false, true)} variant="h3"
                         textAlign={'right'}>X</Typography>
@@ -216,6 +219,7 @@ function ConsumerProduct({
                             onClick={toggleDrawer("right", true, true)}
                             variant="contained"
                             size={'small'}
+                            color={'success'}
                         >
                             Add to cart
                         </Button>) : (null)}

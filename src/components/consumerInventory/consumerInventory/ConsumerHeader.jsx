@@ -1,25 +1,28 @@
-import {Box, Grid2} from '@mui/material';
+import {Box, Grid2, Typography} from '@mui/material';
 import React from 'react'
+import styles from '../../../pages/inventory/inventory.module.scss'
 
 function ConsumerHeader() {
     return (
-        <Box fontWeight={"600"} fontSize={"larger"}>
-            <Grid2 container>
+        <Box fontWeight={"600"} className={styles.header}>
+            <Grid2 container size={12}>
                 <Grid2 item size={2}></Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Product Name
+                    <Typography variant={'h6'} fontWeight={'600'}>Product Name</Typography>
                 </Grid2>
                 <Grid2 item size={1} textAlign={"center"}>
-                    Warehouse Stock
+                    <Typography variant={'h6'} fontWeight={'600'}>Stock</Typography>
+
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Supplier Name
+                    <Typography variant={'h6'} fontWeight={'600'}>Supplier Name</Typography>
+
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Store Stock
+                    <Typography variant={'h6'} fontWeight={'600'}>Store Stock</Typography>
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Next Shipment
+                    <Typography variant={'h6'} fontWeight={'600'}>Next Shipment</Typography>
                 </Grid2>
             </Grid2>
         </Box>

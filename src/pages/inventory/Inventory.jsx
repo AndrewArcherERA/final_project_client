@@ -1,12 +1,13 @@
-import {Box, Input} from "@mui/material";
+import {Box, Input, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import ConsumerHeader from "../../components/consumerInventory/consumerInventory/ConsumerHeader";
 import ConsumerProduct from "../../components/consumerInventory/consumerInventory/ConsumerProduct";
 import EmployeeHeader from "../../components/employeeInventory/EmployeeHeader";
 import EmployeeProduct from "../../components/employeeInventory/EmployeeProduct";
-import {blue} from "@mui/material/colors";
 import {useSelector} from "react-redux";
 import axios from "axios";
+import styles from './inventory.module.scss'
+import loading from '../../images/loading.svg'
 
 function Inventory({userType}) {
     const [inventory, setInventory] = useState([]);
@@ -15,9 +16,6 @@ function Inventory({userType}) {
     useEffect(() => {
         getInventory()
     }, []);
-    useEffect(() => {
-        console.log(inventory[0])
-    }, [inventory]);
 
     async function getInventory() {
         try {
@@ -37,33 +35,17 @@ function Inventory({userType}) {
     }
 
     return (
-        <Box>
-            <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-            >
-                <Box mb={2}>
-                    <Input type="text" placeholder="Search for product..."/>
-                </Box>
-            </Box>
-            <Box width={"80vw"} border={2} py={2} bgcolor={blue[400]} borderRadius={2}>
-                {/* TODO: Map products */}
+        <div className={styles.container}>
+            {userType === "consumer" ? (
+                <ConsumerHeader/>
+            ) : (
+                <EmployeeHeader/>
+            )}
+            <div className={styles.inventoryWrapper}>
                 {userType === "consumer" ? (
-                    <ConsumerHeader/>
-                ) : (
-                    <EmployeeHeader/>
-                )}
-                <Box
-                    borderTop={2}
-                    height={"70vh"}
-                    maxHeight={"70vh"}
-                    sx={{overflowY: "scroll"}}
-                    bgcolor={"white"}
-                >
-                    {userType === "consumer" ? (
-                        [inventory[0] ? inventory[0].map((product, index) => {
-                            return (
+                    [inventory[0] ? inventory[0].map((product, index) => {
+                        return (
+                            <div className={index % 2 === 0 ? styles.isEven : styles.isOdd}>
                                 <ConsumerProduct image={product.link} name={product.name} inStock={product?.quantity}
                                                  supplierName={product.company_name}
                                                  nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
@@ -72,11 +54,16 @@ function Inventory({userType}) {
                                                  key={index}
                                                  id={product.id}
                                 />
-                            )
-                        }) : 'Loading...']
-                    ) : (
-                        [inventory[0] ? inventory[0].map((product, index) => {
-                            return (
+                            </div>
+                        )
+                    }) : <div className={styles.loadingContainer}>
+                        <img src={loading} className={styles.loading} alt={'loading'}/>
+                        <Typography variant={'h5'}>Loading...</Typography>
+                    </div>]
+                ) : (
+                    [inventory[0] ? inventory[0].map((product, index) => {
+                        return (
+                            <div className={index % 2 === 0 ? styles.isEven : styles.isOdd}>
                                 <EmployeeProduct image={product.link} name={product.name} inStock={product?.quantity}
                                                  supplierName={product.company_name}
                                                  nextDeliveryDate={product.incomingShipment?.expected_delivery_date}
@@ -85,13 +72,17 @@ function Inventory({userType}) {
                                                  warehouseStock={product.warehouse_quantity?.quantity}
                                                  key={index}
                                 />
-                            )
-                        }) : 'Loading...']
-                    )}
-                </Box>
-            </Box>
-        </Box>
-    );
+                            </div>
+                        )
+                    }) : <div className={styles.loadingContainer}>
+                        <img src={loading} className={styles.loading} alt={'loading'}/>
+                        <Typography variant={'h5'}>Loading...</Typography>
+                    </div>]
+                )}
+            </div>
+        </div>
+    )
+        ;
 }
 
 export default Inventory;

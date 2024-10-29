@@ -53,7 +53,6 @@ function App() {
                             element={<Inventory userType={user.type}/>}
                         />
                         <Route path={"suppliers"} element={<Suppliers/>}/>
-                        <Route path={"messages"} element={<Messages/>}/>
                         <Route path={"orders"} element={<Orders/>}/>
                     </Route>
                 </Route>
@@ -64,7 +63,6 @@ function App() {
                         element={<SupplierDashboard/>}
                     >
                         <Route index element={<Products/>}/>
-                        <Route path={"messages"} element={<Messages/>}/>
                         <Route path={"orders"} element={<SupplierOrders/>}/>
                     </Route>
                 </Route>
@@ -77,7 +75,6 @@ function App() {
                             index
                             element={<Inventory userType={user.type}/>}
                         />
-                        <Route path={"messages"} element={<Messages/>}/>
                         <Route path={"orders"} element={<Orders/>}/>
                     </Route>
                 </Route>

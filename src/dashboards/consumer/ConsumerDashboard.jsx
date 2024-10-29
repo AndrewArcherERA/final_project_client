@@ -320,6 +320,9 @@ function ConsumerDashboard() {
             role="presentation"
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
+            height={'100%'}
+            color={'whitesmoke'}
+            bgcolor={'#162541'}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -336,7 +339,7 @@ function ConsumerDashboard() {
                     </Typography>
                 </ListItem>
                 <Divider/>
-                <ListItem>
+                <ListItem sx={{backgroundColor: '#001539', borderRadius: '10px'}}>
                     <Grid2 container rowSpacing={1}>
                         <Grid2 item size={6}>
                             <Typography variant="h6">Email:</Typography>
@@ -622,34 +625,36 @@ function ConsumerDashboard() {
                                 Add Store Location
                             </Button>
                         </Box>
-                        {stores.length > 0
-                            ? stores.map((store, index) => {
-                                return (
-                                    <ConsumerStoreAccordian
-                                        store_name={store.store.name}
-                                        f_name={store.manager.f_name}
-                                        l_name={store.manager.l_name}
-                                        email={store.manager.email}
-                                        phone={store.manager.phone}
-                                        street={store.store.street_address}
-                                        city={store.store.city}
-                                        state={store.store.state}
-                                        zip={store.store.zip}
-                                        store_id={store.store.id}
-                                        employee_id={store.manager.id}
-                                        setStores={setStores}
-                                        stores={stores}
-                                        index={index}
-                                        key={index}
-                                    />
-                                );
-                            })
-                            : null}
+                        <Box display={"flex"} flexDirection={'column'} gap={2}>
+                            {stores.length > 0
+                                ? stores.map((store, index) => {
+                                    return (
+                                        <ConsumerStoreAccordian
+                                            store_name={store.store.name}
+                                            f_name={store.manager.f_name}
+                                            l_name={store.manager.l_name}
+                                            email={store.manager.email}
+                                            phone={store.manager.phone}
+                                            street={store.store.street_address}
+                                            city={store.store.city}
+                                            state={store.store.state}
+                                            zip={store.store.zip}
+                                            store_id={store.store.id}
+                                            employee_id={store.manager.id}
+                                            setStores={setStores}
+                                            stores={stores}
+                                            index={index}
+                                            key={index}
+                                        />
+                                    );
+                                })
+                                : null}
+                        </Box>
                     </Box>
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <Box>
+                    <Box bgcolor={'#001539'} p={2} borderRadius={'10px'}>
                         <Box
                             display={"flex"}
                             justifyContent={"space-between"}
@@ -873,7 +878,7 @@ function ConsumerDashboard() {
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <Button fullWidth color="error" onClick={handleLogout}>Logout</Button>
+                    <Button fullWidth color="error" onClick={handleLogout} variant={'contained'}>Logout</Button>
                 </ListItem>
                 <Divider/>
             </List>
@@ -889,6 +894,9 @@ function ConsumerDashboard() {
                 role="presentation"
                 onKeyDown={toggleCheckoutDrawer(anchor, false)}
                 p={3}
+                height={'100%'}
+                color={'whitesmoke'}
+                bgcolor={'#162541'}
             >
                 <Typography sx={{cursor: "pointer"}} onClick={toggleCheckoutDrawer(anchor, false, true)} variant="h3"
                             textAlign='right'>X</Typography>
@@ -910,7 +918,7 @@ function ConsumerDashboard() {
                             })}
                         </Box>
                     </ListItem>
-                    <Divider/>
+                    <Divider color={'whitesmoke'}/>
                     <ListItem>
                         <Box>
                             <Box display={"flex"} gap={2} alignItems={'center'}>
@@ -937,7 +945,8 @@ function ConsumerDashboard() {
                     <Divider/>
                     <ListItem>
                         <Box display={'flex'} flexDirection={"column"} gap={2} width={'100%'}>
-                            <Button variant={'contained'} onClick={handleCheckout}>Confirm Order</Button>
+                            <Button variant={'contained'} onClick={handleCheckout} color={'success'}>Confirm
+                                Order</Button>
                         </Box>
                     </ListItem>
                 </List>
@@ -951,6 +960,9 @@ function ConsumerDashboard() {
             role="presentation"
             onKeyDown={toggleCartDrawer(anchor, false)}
             p={3}
+            min-height={'100%'}
+            color={'whitesmoke'}
+            bgcolor={'#162541'}
         >
             <Typography sx={{cursor: "pointer"}} onClick={toggleCartDrawer(anchor, false, true)} variant="h3"
                         textAlign='right'>X</Typography>
@@ -982,7 +994,8 @@ function ConsumerDashboard() {
                                         Delivery Location
                                     </InputLabel>
                                     <Select fullWidth variant='outlined' value={location} label={'Location'}
-                                            onChange={(e) => handleDeliveryLocation(e)}>
+                                            onChange={(e) => handleDeliveryLocation(e)}
+                                            className={styles.quantityInput}>
                                         {/*Map warehouse && store locations*/}
                                         <MenuItem value={'warehouse'}>
                                             Warehouse
@@ -1005,6 +1018,7 @@ function ConsumerDashboard() {
                                 </Drawer>
                                 <Button variant="contained" disabled={!deliveryLocation.type}
                                         onClick={toggleCheckoutDrawer(anchor, true, true)}
+                                        color={'success'}
                                         fullWidth>{deliveryLocation.type ? "Checkout" : "Select delivery location"}</Button>
                             </Grid2>
                         </Grid2>
@@ -1015,24 +1029,21 @@ function ConsumerDashboard() {
     )
 
     return (
-        <Box>
-            <Grid2 container px={3} py={1} borderBottom={2}>
+        <Box className={styles.dashboardBGC}>
+            <Grid2 container className={styles.navWrapper}>
                 <Grid2 item size={2}>
                     <Typography variant="h4">{company_name}</Typography>
                 </Grid2>
                 <Grid2 item size={8}>
                     <nav className={styles.nav}>
                         <Link to={""} className={styles.link}>
-                            <Typography variant="h6">Inventory</Typography>
+                            <Typography variant="h5">Inventory</Typography>
                         </Link>
                         <Link to={"suppliers"} className={styles.link}>
-                            <Typography variant="h6">Suppliers</Typography>
-                        </Link>
-                        <Link to={"messages"} className={styles.link}>
-                            <Typography variant="h6">Messages</Typography>
+                            <Typography variant="h5">Suppliers</Typography>
                         </Link>
                         <Link to={"orders"} className={styles.link}>
-                            <Typography variant="h6" cal>
+                            <Typography variant="h5" cal>
                                 Orders
                             </Typography>
                         </Link>
@@ -1069,14 +1080,7 @@ function ConsumerDashboard() {
                     </nav>
                 </Grid2>
             </Grid2>
-            <Box
-                justifyContent={"center"}
-                alignItems={"center"}
-                display={"flex"}
-                className={styles.outletWrapper}
-            >
-                <Outlet/>
-            </Box>
+            <Outlet/>
         </Box>
     );
 }
@@ -1193,7 +1197,7 @@ function ConsumerStoreAccordian({
             >
                 <Typography variant="h6">{store_name}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails style={{backgroundColor: '#001539', color: 'whitesmoke'}}>
                 <Grid2 container>
                     <Grid2 item size={6}>
                         <Typography>Store Manager:</Typography>
@@ -1270,6 +1274,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lstoreName}
@@ -1285,6 +1290,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lstreet}
@@ -1300,6 +1306,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lcity}
@@ -1315,6 +1322,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lstate}
@@ -1330,6 +1338,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lzip}
@@ -1355,6 +1364,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lf_name}
@@ -1370,6 +1380,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={ll_name}
@@ -1385,6 +1396,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lemail}
@@ -1400,6 +1412,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={pass}
@@ -1415,6 +1428,7 @@ function ConsumerStoreAccordian({
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    sx={{color: 'whitesmoke'}}
                                                     fullWidth
                                                     type="text"
                                                     value={lphone}
@@ -1483,7 +1497,7 @@ function CartItem({itemName, quantity, unitPrice, prodID, image_link}) {
                         fontWeight={600}
                         paddingRight={2}
                         pb={1}>X</Typography>
-            <Grid2 container width={'100%'} alignItems={"center"}>
+            <Grid2 container width={'100%'} alignItems={"center"} p={2}>
                 <Grid2 item size={12}>
                     <img className={styles.cartImage} src={image_link} alt={'product image'}/>
                 </Grid2>
@@ -1493,7 +1507,7 @@ function CartItem({itemName, quantity, unitPrice, prodID, image_link}) {
                 <Grid2 item size={6} justifyContent={"center"}>
                     <Box display={"flex"} alignItems={"center"} gap={1}>
                         <Typography>Quantity: </Typography>
-                        <Input type={'number'} onChange={handleInput}
+                        <Input type={'number'} className={styles.quantityInput} onChange={handleInput}
                                defaultValue={quantity}/>
                     </Box>
                     <div>

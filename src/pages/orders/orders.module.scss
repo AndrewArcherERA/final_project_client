@@ -1,35 +1,28 @@
 .mainContainer {
-    width: 100%;
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 5px;
+  width: 100%;
+  min-height: calc(100vh - 86px);
+  max-height: calc(100vh - 86px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
 }
-.search {
-    width: 90%;
-}
-.input {
-    width: 25%;
-}
+
 .ordersParent {
-    width: 90%;
-    height: 70vh;
-    max-height: 70vh;
-    border: 1px solid black;
-    overflow-y: scroll;
-    text-align: center;
-    border-radius: 5px;
+  width: 100%;
+  min-height: calc(100vh - 86px);
+  max-height: calc(100vh - 86px);
+  overflow-y: scroll;
+  text-align: center;
 }
 
 .heading {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid black;
-    background-color: rgb(230, 230, 230);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid whitesmoke;
 }
 
-.ordersContainer {
-    width: 100%;
+.isEven {
+  background-color: #001539;
 }

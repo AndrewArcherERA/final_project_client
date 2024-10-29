@@ -15,9 +15,6 @@ function Orders() {
     }, []);
     return (
         <div className={styles.mainContainer}>
-            <div className={styles.search}>
-                <Input type="text" className={styles.input} placeholder="Search by order ID..."/>
-            </div>
             <div className={styles.ordersParent}>
                 <div className={styles.heading}>
                     <Grid2 container>
@@ -50,18 +47,26 @@ function Orders() {
                 <div className={styles.ordersContainer}>
                     {orders.loading ? ('loading...') : (
                         <>
-                            {orders.list.map((order) => {
+                            {orders.list.map((order, index) => {
+                                const delivery_date = new Date(order.delivery_date)
+                                const expected_date = new Date(order.expected_delivery_date);
+                                const actual_delivery_date = delivery_date.toISOString().slice(0, 10);
+                                const expected_delivery_date = expected_date.toISOString().slice(0, 10);
                                 return (
-                                    <Order
-                                        status={order.delivery_status} delivery_date={order.delivery_date}
-                                        expected_delivery_date={order.expected_delivery_date} order_id={order.id}
-                                        prod_name={order.productName} quantity={order.quantity}
-                                        street={order.storeStreet ? order.storeStreet : order.warehouseStreet}
-                                        state={order.storeState ? order.storeState : order.warehouseState}
-                                        city={order.storeCity ? order.storeCity : order.warehouseCity}
-                                        zip={order.storeZip ? order.storeZip : order.warehouseZip}
-                                        total_cost={order.total_cost}
-                                    />
+                                    <div className={index % 2 === 0 ? styles.isEven : null}>
+                                        <Order
+                                            status={order.delivery_status}
+                                            delivery_date={order.delivery_date ? actual_delivery_date : null}
+                                            expected_delivery_date={order.expected_delivery_date ? expected_delivery_date : null}
+                                            order_id={order.id}
+                                            prod_name={order.productName} quantity={order.quantity}
+                                            street={order.storeStreet ? order.storeStreet : order.warehouseStreet}
+                                            state={order.storeState ? order.storeState : order.warehouseState}
+                                            city={order.storeCity ? order.storeCity : order.warehouseCity}
+                                            zip={order.storeZip ? order.storeZip : order.warehouseZip}
+                                            total_cost={order.total_cost}
+                                        />
+                                    </div>
                                 )
                             })}
                         </>

@@ -5,11 +5,14 @@ import styles from "./suppliers.module.scss";
 import ConsumerProduct from "../../components/supplierPage/ConsumerProduct";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import noProds from '../../images/noProds.png'
+import loading from '../../images/loading.svg'
 
 function Suppliers() {
     const [suppliers, setSuppliers] = useState([]);
     const [supplierProducts, setSupplierProducts] = useState([]);
     const [selected_company_id, set_selected_company_id] = useState();
+    const [gettingProds, setGettingProds] = useState(false);
     const user = useSelector((state) => state.user.data);
 
 
@@ -43,8 +46,9 @@ function Suppliers() {
     }
 
     function handleSelected(id) {
+        setGettingProds(true)
         set_selected_company_id(id);
-        getSelectedSupplierProds(id);
+        getSelectedSupplierProds(id).then(() => setGettingProds(false));
     }
 
 
@@ -56,46 +60,24 @@ function Suppliers() {
         handleSelected(suppliers[0]?.id);
     }, [suppliers]);
 
-    // useEffect(() => {
-    //     console.log(supplierProducts)
-    // }, [supplierProducts]);
-
     return (
-        <Box width={'90vw'} height={"70vh"} maxHeight={"70vh"} overflow={'hidden'} border={2} borderRadius={3}
-             display={"flex"}>
-            <Box width={"25%"} borderRight={2} height={"100%"}>
-                <Box
-                    height={"100px"}
+        <div className={styles.container}>
+            <Box className={styles.cardWrapper}>
+                <div className={styles.headerSuppliers}>
+                    <Typography variant={'h6'}>Suppliers</Typography>
+                </div>
+                {suppliers.length > 0 ? (suppliers.map((supplier) => {
+                    return (
+                        <div onClick={() => handleSelected(supplier.id)}
 
-                    display={"flex"}
-                    alignItems={"center"}
-                    p={1}
-                    borderBottom={2}
-                >
-                    <Input
-                        fullWidth
-                        type={"text"}
-                        placeholder="Search for supplier..."
-                    />
-                </Box>
-                <Box className={styles.cardWrapper}>
-                    {suppliers.length > 0 ? (suppliers.map((supplier) => {
-                        return (
-                            <div onClick={() => handleSelected(supplier.id)}
-
-                                 className={selected_company_id === supplier.id ? styles.isSelected : null}
-                            >
-                                <SupplierCard company_name={supplier.company_name}/>
-                            </div>
-                        )
-                        // if (selected_company_id === supplier.id) return
-                        // else return <div onClick={(e) => handleSelected(e)} id={supplier.id}><SupplierCard
-                        //     name={supplier.company_name}/>
-                        // </div>
-                    })) : null}
-                </Box>
+                             className={selected_company_id === supplier.id ? styles.isSelected : null}
+                        >
+                            <SupplierCard company_name={supplier.company_name}/>
+                        </div>
+                    )
+                })) : null}
             </Box>
-            <Box width={"100%"}>
+            <Box width={"100%"} height={'100%'}>
                 <Box
                     height={"100px"}
                     borderBottom={2}
@@ -112,42 +94,62 @@ function Suppliers() {
                         </Grid2>
                         <Grid2 item size={1}>
                             <Typography variant="h6">
-                                Price Per Product
+                                $ / Product
                             </Typography>
                         </Grid2>
                         <Grid2 item size={1}>
                             <Typography variant="h6">
-                                Num Products Per Unit
+                                # Products / Unit
                             </Typography>
                         </Grid2>
                         <Grid2 item size={1}>
                             <Typography variant="h6">
-                                Num Units Avialable
+                                Stock
                             </Typography>
                         </Grid2>
                         <Grid2 size={1} item>
-                            <Typography variant="h6">Price per unit</Typography>
+                            <Typography variant="h6">$ / unit</Typography>
                         </Grid2>
                     </Grid2>
                 </Box>
-                <Box width={"100%"} className={styles.productWrapper}>
-                    {supplierProducts.length > 0 ? (
-                        supplierProducts.map((prod) => {
-                            return (
-                                <ConsumerProduct productID={prod.id} image={prod.image_link}
-                                                 pricePerProduct={prod.price_per_product}
-                                                 numProdPerUnit={prod.num_products_per_unit}
-                                                 numUnitsAvail={prod.num_units_available}
-                                                 pricePerUnit={prod.num_products_per_unit * prod.price_per_product}
-                                                 name={prod.name}/>
-                            )
-                        })
-                    ) : (<div>
-                        <Typography>No Products...</Typography>
-                    </div>)}
+                <Box width={"100%"}>
+                    <div className={styles.productWrapper}>
+                        {gettingProds ? (
+                            <div className={styles.loadingContainer}>
+                                <img src={loading} className={styles.loading}/>
+                                <Typography variant={'h5'}>Loading...</Typography>
+                            </div>
+                        ) : (
+                            <>
+                                {supplierProducts.length > 0 ? (
+                                    supplierProducts.map((prod, index) => {
+                                        return (
+                                            <div className={index % 2 === 0 ? styles.isEven : null}>
+                                                <ConsumerProduct productID={prod.id} image={prod.image_link}
+                                                                 pricePerProduct={prod.price_per_product}
+                                                                 numProdPerUnit={prod.num_products_per_unit}
+                                                                 numUnitsAvail={prod.num_units_available}
+                                                                 pricePerUnit={prod.num_products_per_unit * prod.price_per_product}
+                                                                 name={prod.name}/>
+                                            </div>
+                                        )
+                                    })
+                                ) : (<div className={styles.noProductsWrapper}>
+                                    <div className={styles.noProdsBackground}>
+                                        <img src={noProds} className={styles.noProds}/>
+                                        <div className={styles.noProdsText}>
+                                            <Typography variant={'h3'} fontWeight={'600'}>Uh oh...</Typography>
+                                            <Typography variant={'h4'}>Looks like this supplier hasnt added any products
+                                                yet!</Typography>
+                                        </div>
+                                    </div>
+                                </div>)}
+                            </>
+                        )}
+                    </div>
                 </Box>
             </Box>
-        </Box>
+        </div>
     );
 }
 

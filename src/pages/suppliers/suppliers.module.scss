@@ -1,15 +1,38 @@
+.container {
+  width: 100%;
+  display: flex;
+}
+
 .cardWrapper {
   overflow-y: scroll;
-  max-height: 100%;
+  border-right: 2px solid whitesmoke;
+  min-width: 20%;
+  max-height: calc(100vh - 90px);
+  min-height: calc(100vh - 90px);
+}
+
+.headerSuppliers {
+  height: 100px;
+  border-bottom: 2px solid whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
 }
 
 .productWrapper {
   overflow-y: scroll;
-  max-height: 100%;
+  max-height: calc(100vh - 204px);
+  min-height: calc(100vh - 204px);
+}
+
+.companyCard:hover {
+  background-color: #001539;
+  cursor: pointer;
 }
 
 .isSelected {
-  background-color: red;
+  background-color: #001539;
 }
 
 .productImage {
@@ -17,8 +40,65 @@
   height: auto;
 }
 
+.isEven {
+  background-color: #001539;
+}
+
+.noProductsWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: calc(100vh - 204px);
+  min-height: calc(100vh - 204px);
+  width: 100%;
+}
+
+.noProdsBackground {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 1000px;
+  gap: 100px;
+  background-color: #0d4485;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.noProds {
+  max-height: 400px;
+  width: auto;
+}
+
+.noProdsText {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  border: 3px solid whitesmoke;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: calc(100vh - 204px);
+  min-height: calc(100vh - 204px);
+  flex-direction: column;
+  color: #2b5cb4;
+  gap: 10px;
+}
+
+.loading {
+  width: 8em;
+
+}
+
 .col {
-  border-right: 1px solid black;
+  border-right: 1px solid whitesmoke;
   height: 100%;
   text-align: center;
   display: flex;

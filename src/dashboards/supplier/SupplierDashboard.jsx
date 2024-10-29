@@ -10,24 +10,24 @@ import {
     Button,
     Modal,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
+import {Link, Outlet} from "react-router-dom";
 import styles from "../dashboardStyles.module.scss";
-import { IoPersonCircleSharp } from "react-icons/io5";
+import {IoPersonCircleSharp} from "react-icons/io5";
 import axios from "axios";
 import bcrypt from "bcryptjs";
-import { useDispatch } from "react-redux";
-import { updateUserInfo } from "../../features/user/userSlice";
-import { logout } from "../../features/user/userSlice";
+import {useDispatch} from "react-redux";
+import {updateUserInfo} from "../../features/user/userSlice";
+import {logout} from "../../features/user/userSlice";
 
 function SupplierDashboard() {
     const [state, setState] = useState({
         right: false,
     });
-    const { company_name, f_name, l_name, email, phone, id, token } =
+    const {company_name, f_name, l_name, email, phone, id, token} =
         useSelector((state) => state.user.data);
-    const { type } = useSelector((state) => state.user);
+    const {type} = useSelector((state) => state.user);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -48,11 +48,9 @@ function SupplierDashboard() {
     const handleCompanyChange = (e) => setUserCompany(e.target.value);
     const dispatch = useDispatch();
 
-    // TODO: Write logic for sending axios call to send order
-
     const toggleDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
-            setState({ ...state, [anchor]: open });
+            setState({...state, [anchor]: open});
     };
 
     async function handleUpdateInfo(e) {
@@ -78,7 +76,7 @@ function SupplierDashboard() {
         const oldPass = e.target[0].value;
         let newPass = e.target[1].value;
         const config = {
-            headers: { Authorization: token },
+            headers: {Authorization: token},
         };
 
         try {
@@ -119,7 +117,7 @@ function SupplierDashboard() {
             p={3}
         >
             <Typography
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
                 onClick={toggleDrawer(anchor, false, true)}
                 variant="h3"
                 textAlign={"right"}
@@ -132,7 +130,7 @@ function SupplierDashboard() {
                         {f_name} {l_name}
                     </Typography>
                 </ListItem>
-                <Divider />
+                <Divider/>
                 <ListItem>
                     <Grid2 container rowSpacing={1}>
                         <Grid2 item size={6}>
@@ -288,13 +286,13 @@ function SupplierDashboard() {
                         </Grid2>
                     </Grid2>
                 </ListItem>
-                <Divider />
+                <Divider/>
                 <ListItem>
                     <Button fullWidth color="error" onClick={handleLogout}>
                         Logout
                     </Button>
                 </ListItem>
-                <Divider />
+                <Divider/>
             </List>
         </Box>
     );
@@ -346,7 +344,7 @@ function SupplierDashboard() {
                 display={"flex"}
                 className={styles.outletWrapper}
             >
-                <Outlet />
+                <Outlet/>
             </Box>
         </>
     );
