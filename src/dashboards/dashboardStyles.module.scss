@@ -6,7 +6,7 @@
 .nav {
   display: flex;
   gap: 40px;
-  justify-content: center;
+  justify-content: flex-end;
   max-height: 1vh;
   align-items: center;
   min-height: 100%;
@@ -38,7 +38,8 @@
 }
 
 .link:hover {
-  color: #42a5f5
+  color: #42a5f5;
+  cursor: pointer;
 }
 
 .passWordModel {
@@ -50,10 +51,9 @@
 .passWordModelBox {
   width: 500px;
   height: 120px;
-  background-color: rgb(255, 255, 255);
   padding: 12px;
   border-radius: 5px;
-
+  background-color: #001539;
 }
 
 .passform {
@@ -61,6 +61,14 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+  height: 100%;
+  background-color: #001539;
+}
+
+.drawer {
+  overflow-y: scroll;
+  background-color: #162541;
+  color: whitesmoke;
   height: 100%;
 }
 
@@ -72,10 +80,6 @@
   background-color: #001539;
 }
 
-.infoModal > input {
-  color: whitesmoke;
-}
-
 .cartItem {
   min-width: 100%;
   border-radius: 10px;
@@ -85,6 +89,11 @@
   padding: 10px 0;
 }
 
+.passwordInput {
+  background-color: whitesmoke;
+  padding: 3px;
+}
+
 .cartImage {
   height: auto;
   width: 100%;
@@ -92,5 +101,6 @@
 }
 
 .quantityInput {
-  color: whitesmoke;
+  background-color: whitesmoke;
+  padding: 3px;
 }

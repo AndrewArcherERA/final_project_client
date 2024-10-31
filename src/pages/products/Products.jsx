@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styles from "./products.module.scss";
 import {
+    Alert,
     Box,
     Button,
     Divider,
@@ -14,6 +15,9 @@ import {
 import {FaImage} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import axios from "axios";
+import loading from '../../images/loading.svg';
+import noProds from '../../images/noProds.png';
+import Snackbar from "@mui/material/Snackbar";
 
 function Products() {
     const [newProductState, setnewProductState] = useState({
@@ -21,6 +25,7 @@ function Products() {
     });
     const user = useSelector((state) => state.user.data)
     const [products, setProducts] = useState([]);
+    const [gettingProducts, setGettingProducts] = useState(false);
 
     const toggleNewProduct = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
@@ -49,13 +54,14 @@ function Products() {
                     },
                 }
             );
-            setProducts([...products, product.data.product]);
-            form[0] = [];
-            form[1].value = '';
-            form[2].value = '';
-            form[3].value = '';
-            form[4].value = '';
-
+            // form[0] = [];
+            // form[1].value = '';
+            // form[2].value = '';
+            // form[3].value = '';
+            // form[4].value = '';
+            setnewProductState({right: false})
+            handleSnackBarState(true, 'Product created successfully!', 'success');
+            getAllProducts()
         } catch (error) {
             console.log(error.message)
         }
@@ -82,12 +88,37 @@ function Products() {
     }
 
     useEffect(() => {
-        getAllProducts()
+        setGettingProducts(true);
+        getAllProducts().then(() => {
+            setGettingProducts(false);
+        })
     }, []);
 
-    // useEffect(() => {
-    //     console.log(products)
-    // }, [products]);
+    const [snackBarState, setSnackBarState] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
+
+    const handleSnackBarState = (open, message, severity) => {
+        setSnackBarState({
+            open: open,
+            message: message,
+            severity: severity
+        })
+    }
+
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarState({
+            open: false,
+            message: '',
+            severity: 'success'
+        });
+    };
 
     const newProductlist = (anchor) => (
         <Box
@@ -95,6 +126,7 @@ function Products() {
             role="presentation"
             onKeyDown={toggleNewProduct(anchor, false)}
             p={3}
+            className={styles.newProd}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -121,12 +153,12 @@ function Products() {
                                     gap={3}
                                 >
                                     <FaImage size={50}/>
-                                    <Input required type="file"/>
+                                    <Input className={styles.passwordInput} required type="file"/>
                                 </Box>
                                 <Box textAlign={"center"}>
-                                    <Input required placeholder="Enter product name"/>
+                                    <Input className={styles.passwordInput} required placeholder="Enter product name"/>
                                 </Box>
-                                <Grid2 container>
+                                <Grid2 container spacing={2} mt={2}>
                                     <Grid2 borderBottom={1} item size={6}>
                                         <Typography
                                             variant="h6"
@@ -142,7 +174,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input required placeholder="Enter quanity"/>
+                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -159,7 +191,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input required placeholder="Enter quanity"/>
+                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -176,7 +208,7 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input required placeholder="Enter quanity"/>
+                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
                                     </Grid2>
                                 </Grid2>
                             </Box>
@@ -199,82 +231,83 @@ function Products() {
     );
     return (
         <div>
-            <div className={styles.buttonContainer}>
-                <Drawer
-                    anchor={"right"}
-                    open={newProductState["right"]}
-                    onClose={toggleNewProduct("right", false)}
+            <Snackbar open={snackBarState.open} autoHideDuration={6000} onClose={handleSnackBarClose}>
+                <Alert
+                    onClose={handleSnackBarClose}
+                    severity={snackBarState.severity}
+                    variant="filled"
+                    sx={{width: '100%'}}
                 >
-                    {newProductlist("right")}
-                </Drawer>
-                <Button
-                    variant="contained"
-                    onClick={toggleNewProduct("right", true, true)}
-                >
-                    Add Product
-                </Button>
-            </div>
+                    {snackBarState.message}
+                </Alert>
+            </Snackbar>
             <div className={styles.container}>
                 <div className={styles.header}>
                     <Grid2 container alignItems={"center"} height={"60px"}>
                         <Grid2
                             item
                             size={2}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                             borderLeft={1}
                         >
-                            <Typography className={styles.details}>
-                                Image
-                            </Typography>
+                            <Drawer
+                                anchor={"right"}
+                                open={newProductState["right"]}
+                                onClose={toggleNewProduct("right", false)}
+                            >
+                                {newProductlist('right')}
+                            </Drawer>
+                            <Button variant={'contained'} onClick={toggleNewProduct('right', true, true)}>Add
+                                Product</Button>
                         </Grid2>
                         <Grid2
                             item
                             size={3}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                         >
-                            <Typography className={styles.details}>
+                            <Typography variant={'h6'} className={styles.details}>
                                 Name
                             </Typography>
                         </Grid2>
                         <Grid2
                             item
                             size={1}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                         >
-                            <Typography className={styles.details}>
-                                price/item
+                            <Typography variant={'h6'} className={styles.details}>
+                                $ / item
                             </Typography>
                         </Grid2>
                         <Grid2
                             item
                             size={1}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                         >
-                            <Typography className={styles.details}>
-                                item/unit
+                            <Typography variant={'h6'} className={styles.details}>
+                                # products / unit
                             </Typography>
                         </Grid2>
                         <Grid2
                             item
                             size={1}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                         >
-                            <Typography className={styles.details}>
-                                price/unit
+                            <Typography variant={'h6'} className={styles.details}>
+                                $ / unit
                             </Typography>
                         </Grid2>
                         <Grid2
                             item
                             size={1}
-                            className={styles.col}
+                            className={styles.headingCol}
                             borderTop={1}
                         >
-                            <Typography className={styles.details}>
+                            <Typography variant={'h6'} className={styles.details}>
                                 stock
                             </Typography>
                         </Grid2>
@@ -290,17 +323,33 @@ function Products() {
                 </div>
 
                 <div className={styles.productContainer}>
-                    {products.length > 0 ? (products.map((prod) => {
-                        return <Product image={prod.image_link} image_key={prod.image_key} name={prod.name}
-                                        stock={prod.num_units_available} items_per_unit={prod.num_products_per_unit}
-                                        price_per_item={prod.price_per_product}
-                                        key={prod.id}
-                                        products={products}
-                                        setProducts={setProducts}
-                                        token={user.token}
-                                        product_id={prod.id}/>
-
-                    })) : <Typography variant={'h4'}>Add a product</Typography>}
+                    {gettingProducts ? (
+                        <div className={styles.loading}>
+                            <img src={loading} alt={'loading'}/>
+                            <Typography variant={'h5'}>Loading...</Typography>
+                        </div>
+                    ) : (
+                        <>
+                            {products.length > 0 ? (products.map((prod, index) => {
+                                return (
+                                    < div className={index % 2 === 0 ? styles.isEven : null}>
+                                        <Product image={prod.image_link} image_key={prod.image_key} name={prod.name}
+                                                 stock={prod.num_units_available}
+                                                 items_per_unit={prod.num_products_per_unit}
+                                                 price_per_item={prod.price_per_product}
+                                                 key={prod.id}
+                                                 products={products}
+                                                 setProducts={setProducts}
+                                                 token={user.token}
+                                                 product_id={prod.id}/>
+                                    </div>
+                                )
+                            })) : <div className={styles.loading}>
+                                <img src={noProds} alt={'loading'}/>
+                                <Typography variant={'h5'}>Add a product to start selling!</Typography>
+                            </div>}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
@@ -322,6 +371,31 @@ function Product({
     const [editState, setEditState] = useState({
         right: false,
     });
+    const [snackBarState, setSnackBarState] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
+
+    const handleSnackBarState = (open, message, severity) => {
+        setSnackBarState({
+            open: open,
+            message: message,
+            severity: severity
+        })
+    }
+
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarState({
+            open: false,
+            message: '',
+            severity: 'success'
+        });
+    };
 
     const toggleEditDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
@@ -339,6 +413,16 @@ function Product({
 
     return (
         <div className={styles.prodcut}>
+            <Snackbar open={snackBarState.open} autoHideDuration={6000} onClose={handleSnackBarClose}>
+                <Alert
+                    onClose={handleSnackBarClose}
+                    severity={snackBarState.severity}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackBarState.message}
+                </Alert>
+            </Snackbar>
             <Grid2
                 container
                 borderBottom={1}
@@ -355,7 +439,7 @@ function Product({
                     </Typography>
                 </Grid2>
                 <Grid2 item size={1} className={styles.col}>
-                    <Typography className={styles.details}>{price_per_item}</Typography>
+                    <Typography className={styles.details}>${price_per_item}</Typography>
                 </Grid2>
                 <Grid2 item size={1} className={styles.col}>
                     <Typography className={styles.details}>{items_per_unit}</Typography>
@@ -372,14 +456,14 @@ function Product({
                         open={editState["right"]}
                         onClose={toggleEditDrawer("right", false)}
                     >
-                        {EditList("right", price_per_item, items_per_unit, name, image, image_key, toggleEditDrawer, product_id, products, setProducts, token)}
+                        {EditList("right", price_per_item, items_per_unit, name, image, image_key, toggleEditDrawer, setEditState, product_id, products, setProducts, token, handleSnackBarState)}
                     </Drawer>
                     <Drawer
                         anchor={"right"}
                         open={stockState["right"]}
                         onClose={toggleStockDrawer("right", false)}
                     >
-                        {StockList("right", stock, product_id, products, setProducts, token, toggleStockDrawer, setStockState)}
+                        {StockList("right", stock, product_id, products, setProducts, token, toggleStockDrawer, setStockState, handleSnackBarState)}
                     </Drawer>
                     <Box
                         display={"flex"}
@@ -406,7 +490,7 @@ function Product({
     );
 }
 
-function StockList(anchor, currentStock, product_id, products, setProducts, token, toggleStockDrawer, setStockState) {
+function StockList(anchor, currentStock, product_id, products, setProducts, token, toggleStockDrawer, setStockState, handleSnackBarState) {
     async function handleRefillStock(e) {
         e.preventDefault();
         try {
@@ -435,7 +519,7 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
             })
             setProducts(updated);
             setStockState({right: false})
-            alert('Stock updated successfully');
+            handleSnackBarState(true, 'Stock updated successfully!', 'success');
         } catch (error) {
             console.log(error.message);
         }
@@ -450,6 +534,7 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
         role="presentation"
         onKeyDown={toggleStockDrawer("right", false)}
         p={3}
+        className={styles.newProd}
     >
         <Typography
             sx={{cursor: "pointer"}}
@@ -498,8 +583,9 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
                                 display={"flex"}
                                 justifyContent={"flex-end"}
                             >
-                                <Input type={"number"} onChange={(e) => handleChange(e)}
-                                       className={styles.updateStockInput}/>
+                                <Input type={"number"} placeholder={"Enter new stock..."}
+                                       onChange={(e) => handleChange(e)}
+                                       className={styles.passwordInput}/>
                             </Grid2>
                         </Grid2>
                     </Box>
@@ -507,7 +593,6 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
             </List>
             <Divider/>
             <List>
-                {/* TODO: calculate total price for order, order button here */}
                 <ListItem>
                     <Grid2 container width={"100%"}>
                         <Grid2
@@ -526,7 +611,7 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
 };
 
 
-function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, toggleEditDrawer, product_id, products, setProducts, token) {
+function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, toggleEditDrawer, setEditState, product_id, products, setProducts, token, handleSnackBarState) {
     async function handleUpdateProduct(e) {
         e.preventDefault();
         const form = e.target;
@@ -561,7 +646,8 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                 else return prod;
             })
             setProducts(updated);
-
+            setEditState({'right': false})
+            handleSnackBarState(true, 'Product updated successfully!', 'success')
         } catch (error) {
             console.log(error.message)
         }
@@ -589,6 +675,7 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
             role="presentation"
             onKeyDown={toggleEditDrawer(anchor, false)}
             p={3}
+            className={styles.newProd}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -616,7 +703,7 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                                     <Button onClick={handleCancle}>Cancel</Button> : null}
                             </Box>
                             <Box width={"100%"}>
-                                <Grid2 container>
+                                <Grid2 container spacing={2}>
                                     <Grid2 borderBottom={1} item size={6}>
                                         <Typography variant="h6" fontWeight={600}>
                                             Product image:
@@ -627,10 +714,11 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                                         size={6}
                                         display={"flex"}
                                         justifyContent={"flex-end"}
-                                        borderBottom={1}
                                         alignItems={"center"}
                                     >
-                                        <input type={"file"} accept={'image/*'} id={'preview'}
+                                        <input className={styles.passwordInput}
+                                               type={"file"} accept={'image/*'}
+                                               id={'preview'}
                                                onChange={(e) => handleImageChange(e)}/>
                                     </Grid2>
                                     <Grid2 borderBottom={1} item size={6}>
@@ -643,11 +731,9 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                                         size={6}
                                         display={"flex"}
                                         justifyContent={"flex-end"}
-                                        borderBottom={1}
                                     >
-                                        <Input
-                                            defaultValue={name}
-                                            className={styles.input}
+                                        <Input className={styles.passwordInput}
+                                               defaultValue={name}
                                         />
                                     </Grid2>
                                     <Grid2 borderBottom={1} item size={6}>
@@ -660,9 +746,8 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                                         size={6}
                                         display={"flex"}
                                         justifyContent={"flex-end"}
-                                        borderBottom={1}
                                     >
-                                        <Input defaultValue={pricePerItem}/>
+                                        <Input className={styles.passwordInput} defaultValue={pricePerItem}/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography variant="h6" fontWeight={600}>
@@ -674,9 +759,8 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
                                         size={6}
                                         display={"flex"}
                                         justifyContent={"flex-end"}
-                                        borderBottom={1}
                                     >
-                                        <Input defaultValue={itemsPerUnit}/>
+                                        <Input className={styles.passwordInput} defaultValue={itemsPerUnit}/>
                                     </Grid2>
                                 </Grid2>
                             </Box>

@@ -29,7 +29,20 @@ const initialState = {
 const orderSlice = createSlice({
     name: 'orders',
     initialState,
-    reducers: {},
+    reducers: {
+        updateStatus: (state, action) => {
+            state.list.forEach((order) => {
+                if (order.id === action.payload.order_id)
+                    order.delivery_status = 'received';
+            })
+        },
+        updateStatusShipped: (state, action) => {
+            state.list.forEach((order) => {
+                if (order.id === action.payload.orderId)
+                    order.delivery_status = 'shipped';
+            })
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getOrders.pending, (state) => {
@@ -48,6 +61,6 @@ const orderSlice = createSlice({
     }
 })
 
-export const {} = orderSlice.actions;
+export const {updateStatus, updateStatusShipped} = orderSlice.actions;
 
 export default orderSlice.reducer;

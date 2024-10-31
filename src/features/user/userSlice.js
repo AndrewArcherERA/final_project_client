@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const signInUser = createAsyncThunk(
@@ -7,11 +7,10 @@ export const signInUser = createAsyncThunk(
         try {
             const url = "http://localhost:8080/auth/signIn";
             let response = await axios.post(url, data);
-            response = { data: response.data, type: data.user_type };
+            response = {data: response.data, type: data.user_type};
             return response;
         } catch (error) {
-            if (error.status === 401) alert("Wrong email or password");
-            return thunkAPI.rejectWithValue({ error: error.message });
+            return thunkAPI.rejectWithValue({error: error.message});
         }
     }
 );
@@ -19,7 +18,7 @@ export const signInUser = createAsyncThunk(
 export const updateUserInfo = createAsyncThunk(
     "user/updateUserInfo",
     async (data, thunkAPI) => {
-        const { f_name, l_name, email, phone, company_name, user_type, token, userID } = data;
+        const {f_name, l_name, email, phone, company_name, user_type, token, userID} = data;
         try {
             const url = "http://localhost:8080/account/updateUserInfo";
             const config = {
@@ -39,7 +38,7 @@ export const updateUserInfo = createAsyncThunk(
             let response = await axios.put(url, body, config);
             return response.data;
         } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
+            return thunkAPI.rejectWithValue({error: error.message});
         }
     }
 );

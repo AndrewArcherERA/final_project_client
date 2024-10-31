@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box,
     Button,
     Divider, Drawer,
@@ -11,6 +12,9 @@ import {
     Select,
     Typography
 } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import {IoMdClose} from "react-icons/io";
 import React, {useEffect, useState} from 'react'
 import styles from '../../../pages/inventory/inventory.module.scss'
 import {useSelector} from "react-redux";
@@ -24,13 +28,42 @@ function ConsumerProduct({
                              supplierName,
                              storeStocks,
                              nextDeliveryDate,
-                             nextDeliveryQuantity
+                             nextDeliveryQuantity,
+                             getInventory
                          }) {
     const user = useSelector(state => state.user.data)
     const [stores, setStores] = useState([]);
     const [location, setLocation] = useState('');
     const [deliveryLocation, setDeliveryLocation] = useState({});
+    const [deleteLocation, setDeleteLocation] = useState({});
     const [adjustableQuantity, setAdjustableQuantity] = useState(0);
+
+    const [snackSent, setSnackSent] = React.useState(false);
+    const [snackDelete, setSnackDelete] = React.useState(false);
+
+    const handleSnackSentOpen = () => {
+        setSnackSent(true);
+    };
+
+    const handleSnackSentClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackSent(false);
+    };
+
+    const handleSnackDeleteOpen = () => {
+        setSnackDelete(true);
+    };
+
+    const handleSnackDeleteClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackDelete(false);
+    };
 
     async function handleSendToStore() {
         try {
@@ -47,7 +80,9 @@ function ConsumerProduct({
             }
             const url = `http://localhost:8080/inventory/sendToStore`;
             await axios.post(url, data, config).then(() => {
+                getInventory()
                 setCartState({...cartState, ['right']: false})
+                handleSnackSentOpen()
             });
         } catch (error) {
             console.error(error.message)
@@ -61,6 +96,43 @@ function ConsumerProduct({
         }
         setLocation(e.target.value);
         setDeliveryLocation(locationData);
+    }
+
+    function handleDeleteLocation(e) {
+        if (e.target.value === 'warehouse') {
+            const locationData = {
+                location_id: user.warehouse_id,
+                type: 'warehouse'
+            }
+            setDeleteLocation(locationData)
+        } else {
+            const locationData = {
+                location_id: stores[parseInt(e.target.value)].store.id,
+                type: 'store'
+            }
+            setDeleteLocation(locationData);
+        }
+        setLocation(e.target.value)
+    }
+
+    async function handleDeleteProduct() {
+        const config = {
+            headers: {
+                Authorization: user.token
+            }
+        }
+        const url = 'http://localhost:8080/inventory/deleteProduct';
+        const data = {
+            location_id: deleteLocation.location_id,
+            location_type: deleteLocation.type,
+            product_id: id,
+        }
+
+        await axios.post(url, data, config).then(() => {
+            getInventory()
+            setDeleteState({...deleteState, ['right']: false})
+            handleSnackDeleteOpen()
+        })
     }
 
     function handleQuantity(e) {
@@ -81,9 +153,16 @@ function ConsumerProduct({
     const [cartState, setCartState] = useState({
         right: false,
     });
+    const [deleteState, setDeleteState] = useState({
+        right: false,
+    });
     const toggleCartDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
             setCartState({...cartState, [anchor]: open});
+    };
+    const toggleDeleteDrawer = (anchor, open, toggle) => (event) => {
+        if ((event.type === "keydown" && event.key === "Esc") || toggle)
+            setDeleteState({...deleteState, [anchor]: open});
     };
     const cartDrawer = (anchor, name, inStock) => (
         <Box
@@ -91,6 +170,7 @@ function ConsumerProduct({
             role="presentation"
             onKeyDown={toggleCartDrawer(anchor, false)}
             p={3}
+            className={styles.drawer}
         >
             <Typography sx={{cursor: "pointer"}} onClick={toggleCartDrawer(anchor, false, true)} variant="h3"
                         textAlign='right'>X</Typography>
@@ -105,8 +185,30 @@ function ConsumerProduct({
                 <ListItem>
                     <Box display={'flex'} width={'100%'} gap={4}>
                         <Typography variant={'h5'}>Order Quantity:</Typography>
-                        <Input type={'number'} onChange={handleQuantity} value={adjustableQuantity}/>
+                        <Input className={styles.passwordInput} type={'number'} onChange={handleQuantity}
+                               value={adjustableQuantity}/>
                     </Box>
+                </ListItem>
+            </List>
+            <Divider/>
+            <List>
+                <ListItem>
+                    <FormControl variant='standard' sx={{minWidth: '100%'}}>
+                        <Typography id={'location'} variant={'h6'} mb={1}>
+                            Delivery Location
+                        </Typography>
+                        <Select className={styles.passwordInput} fullWidth
+                                variant='outlined' value={location}
+                                label={'ocation'}
+                                required
+                                onChange={(e) => handleDeliveryLocation(e)}>
+                            {stores.map((store, index) => {
+                                return (<MenuItem key={index} value={index}>
+                                    {store.store.name}
+                                </MenuItem>)
+                            })}
+                        </Select>
+                    </FormControl>
                 </ListItem>
                 <ListItem>
                     <Button variant="contained" disabled={!deliveryLocation.type}
@@ -115,16 +217,40 @@ function ConsumerProduct({
                     </Button>
                 </ListItem>
             </List>
+        </Box>
+    )
+    const deleteDrawer = (anchor, name, inStock) => (
+        <Box
+            width={500}
+            role="presentation"
+            onKeyDown={toggleDeleteDrawer(anchor, false)}
+            p={3}
+            className={styles.drawer}
+        >
+            <Typography sx={{cursor: "pointer"}} onClick={toggleDeleteDrawer(anchor, false, true)} variant="h3"
+                        textAlign='right'>X</Typography>
+            <List>
+                <Typography variant='h4' borderBottom={2}>Order</Typography>
+                <ListItem>
+                    <Box width={'100%'} alignItems={'center'}>
+                        <Typography variant={'h4'} textAlign={'center'}>{name}</Typography>
+                        <Typography variant={'h5'}>Units in stock: {inStock}</Typography>
+                    </Box>
+                </ListItem>
+            </List>
             <Divider/>
             <List>
                 <ListItem>
                     <FormControl variant='standard' sx={{minWidth: '100%'}}>
-                        <InputLabel>
-                            Delivery Location
-                        </InputLabel>
-                        <Select fullWidth variant='outlined' value={location} label={'Location'}
-                                onChange={(e) => handleDeliveryLocation(e)}>
-                            {/*Map warehouse && store locations*/}
+                        <Typography id={'location'} variant={'h5'} mb={1}>
+                            Location to delete from:
+                        </Typography>
+                        <i>Deleting product from warehouse will also delete it from all store locations</i>
+                        <Select className={styles.passwordInput} fullWidth
+                                variant='outlined' value={location}
+                                required
+                                onChange={(e) => handleDeleteLocation(e)}>
+                            <MenuItem value={'warehouse'}>Warehouse</MenuItem>
                             {stores.map((store, index) => {
                                 return (<MenuItem key={index} value={index}>
                                     {store.store.name}
@@ -132,6 +258,9 @@ function ConsumerProduct({
                             })}
                         </Select>
                     </FormControl>
+                </ListItem>
+                <ListItem>
+                    <Button color={'error'} onClick={handleDeleteProduct}>Delete Product</Button>
                 </ListItem>
             </List>
         </Box>
@@ -142,6 +271,26 @@ function ConsumerProduct({
     }, []);
     return (
         <Box className={styles.productWrapper}>
+            <Snackbar open={snackSent} autoHideDuration={6000} onClose={handleSnackSentClose}>
+                <Alert
+                    onClose={handleSnackSentClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    Product Sent!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={snackDelete} autoHideDuration={6000} onClose={handleSnackDeleteClose}>
+                <Alert
+                    onClose={handleSnackDeleteClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    Product Deleted!
+                </Alert>
+            </Snackbar>
             <Grid2 container height={'100%'} display={"flex"} alignItems={'center'} size={12}>
                 <Grid2 className={styles.col} p={1} item size={2} textAlign={"center"}>
                     <img src={image} className={styles.image} alt={'image'}/>
@@ -182,9 +331,18 @@ function ConsumerProduct({
                     >
                         {cartDrawer("right", name, inStock)}
                     </Drawer>
+                    <Drawer
+                        anchor={"right"}
+                        open={deleteState["right"]}
+                        onClose={toggleDeleteDrawer("right", false)}
+                    >
+                        {deleteDrawer("right", name, inStock)}
+                    </Drawer>
                     <Button onClick={toggleCartDrawer("right", true, true)} color={'success'} variant={'contained'}
                             size={'small'}>Resupply
                         Store</Button>
+                    <Button color={'error'} size={'small'}
+                            onClick={toggleDeleteDrawer("right", true, true)}>Delete</Button>
                 </Grid2>
             </Grid2>
         </Box>

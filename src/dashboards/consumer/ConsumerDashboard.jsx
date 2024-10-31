@@ -1,7 +1,8 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link, Outlet} from "react-router-dom";
 import styles from "../dashboardStyles.module.scss";
 import {
+    Alert,
     Box,
     Button,
     Divider,
@@ -28,6 +29,7 @@ import {FaCartFlatbed} from "react-icons/fa6";
 import {deleteCartItem, test, updateQuantity} from '../../features/user/cartSlice';
 import {getCartItems} from "../../features/user/cartSlice";
 import {grey} from "@mui/material/colors";
+import Snackbar from "@mui/material/Snackbar";
 
 function ConsumerDashboard() {
     const dispatch = useDispatch();
@@ -128,10 +130,11 @@ function ConsumerDashboard() {
             },
         };
         const url = `http://localhost:8080/consumerStore/createStore`;
-        let response = await axios.post(url, body, config);
-        console.log(response.data);
-        setStores([...stores, response.data]);
-        handleCloseNewLocation();
+        await axios.post(url, body, config).then((response) => {
+            setStores([...stores, response.data]);
+            handleSnackBarState(true, 'Store created successfully!', 'success')
+            handleCloseNewLocation();
+        });
     }
 
     async function handleUpdateInfo(e) {
@@ -147,7 +150,7 @@ function ConsumerDashboard() {
             userID: id,
         };
         await dispatch(updateUserInfo(data)).then(function () {
-            alert("User info updated succesfully");
+            handleSnackBarState(true, 'User info updated successfully!', 'success');
             handleCloseInfo();
         });
     }
@@ -163,7 +166,7 @@ function ConsumerDashboard() {
     const toggleCheckoutDrawer = (anchor, open, toggle) => (event) => {
         if ((event.type === "keydown" && event.key === "Esc") || toggle)
             setCheckoutState({...checkoutState, [anchor]: open});
-        else alert("Please select a delivery location")
+        else handleSnackBarState(true, 'Please select a delivery location.', 'error')
     };
 
     async function handlePasswordChange(e) {
@@ -189,12 +192,11 @@ function ConsumerDashboard() {
                 };
 
                 await axios.put(url, data, config).then(function (res) {
-                    alert("Password changed sucsesfully");
+                    handleSnackBarState(true, 'Password changed successfully!', 'success');
                     handleClose();
                 });
             } else {
-                alert("Old password does not match current stored password");
-                return;
+                handleSnackBarState(true, 'Old password does not match current stored password.', 'error');
             }
         } catch (error) {
             console.log(error);
@@ -215,9 +217,11 @@ function ConsumerDashboard() {
             zip: e.target[4].value,
         };
         const url = `http://localhost:8080/account/createWarehouse`;
-        let response = await axios.post(url, body, config);
-        setWarehouse(response.data[0]);
-        handleCloseCreateWarehouseModal();
+        await axios.post(url, body, config).then((response) => {
+            setWarehouse(response.data[0]);
+            handleSnackBarState(true, 'Warehouse created successfully!', 'success');
+            handleCloseCreateWarehouseModal();
+        });
     }
 
     async function handleUpdateWarehouse(e) {
@@ -234,9 +238,11 @@ function ConsumerDashboard() {
             zip: e.target[4].value,
         };
         const url = `http://localhost:8080/account/updateWarehouse`;
-        let response = await axios.post(url, body, config);
-        setWarehouse(response.data[0]);
-        handleCloseUpdateWarehouseModal();
+        await axios.post(url, body, config).then((response) => {
+            setWarehouse(response.data[0]);
+            handleSnackBarState(true, 'Warehouse info updated successfully!', 'success')
+            handleCloseUpdateWarehouseModal();
+        });
     }
 
     async function getWarehouses() {
@@ -259,8 +265,10 @@ function ConsumerDashboard() {
             headers: {Authorization: token},
         };
         const url = `http://localhost:8080/account/deleteWarehouse/${consumer_id}`;
-        await axios.delete(url, config);
-        setWarehouse();
+        await axios.delete(url, config).then(() => {
+            setWarehouse();
+            handleSnackBarClose(true, 'Warehouse deleted.', 'success')
+        });
     }
 
     const handleLogout = () => dispatch(logout());
@@ -298,7 +306,7 @@ function ConsumerDashboard() {
                 orders: items
             };
             await axios.post(url, data, config).then(() => {
-                // dispatch(clearCart());
+                handleSnackBarState(true, 'Order purchased!', 'success')
                 setCheckoutState({...checkoutState, ['right']: false});
                 setCartState({...checkoutState, ['right']: false});
             });
@@ -320,9 +328,7 @@ function ConsumerDashboard() {
             role="presentation"
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
-            height={'100%'}
-            color={'whitesmoke'}
-            bgcolor={'#162541'}
+            className={styles.drawer}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -415,6 +421,7 @@ function ConsumerDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={firstName}
@@ -430,6 +437,7 @@ function ConsumerDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={lastName}
@@ -445,6 +453,7 @@ function ConsumerDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userEmail}
@@ -458,6 +467,7 @@ function ConsumerDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userPhone}
@@ -471,6 +481,7 @@ function ConsumerDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userComapany}
@@ -525,7 +536,8 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth fullWidth
+                                                       type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -533,7 +545,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -541,7 +553,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -549,7 +561,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -557,7 +569,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2
                                                 item
@@ -575,7 +587,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -583,7 +595,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -591,7 +603,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -599,7 +611,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -607,7 +619,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={12}>
                                                 <Button type="submit" fullWidth>
@@ -645,6 +657,7 @@ function ConsumerDashboard() {
                                             stores={stores}
                                             index={index}
                                             key={index}
+                                            handleSnackBarState={handleSnackBarState}
                                         />
                                     );
                                 })
@@ -697,7 +710,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} fullWidth type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -705,7 +718,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -713,7 +726,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -721,7 +734,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} type="text"/>
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Typography variant="h6">
@@ -729,7 +742,7 @@ function ConsumerDashboard() {
                                                 </Typography>
                                             </Grid2>
                                             <Grid2 item size={6}>
-                                                <Input fullWidth type="text"/>
+                                                <Input className={styles.passwordInput} type="text"/>
                                             </Grid2>
                                             <Grid2 item size={12}>
                                                 <Button type="submit" fullWidth>
@@ -793,6 +806,7 @@ function ConsumerDashboard() {
                                                         </Grid2>
                                                         <Grid2 item size={6}>
                                                             <Input
+                                                                className={styles.passwordInput}
                                                                 fullWidth
                                                                 type="text"
                                                                 value={warehouseName}
@@ -806,6 +820,7 @@ function ConsumerDashboard() {
                                                         </Grid2>
                                                         <Grid2 item size={6}>
                                                             <Input
+                                                                className={styles.passwordInput}
                                                                 fullWidth
                                                                 type="text"
                                                                 value={lstreet}
@@ -819,6 +834,7 @@ function ConsumerDashboard() {
                                                         </Grid2>
                                                         <Grid2 item size={6}>
                                                             <Input
+                                                                className={styles.passwordInput}
                                                                 fullWidth
                                                                 type="text"
                                                                 value={lcity}
@@ -832,6 +848,7 @@ function ConsumerDashboard() {
                                                         </Grid2>
                                                         <Grid2 item size={6}>
                                                             <Input
+                                                                className={styles.passwordInput}
                                                                 fullWidth
                                                                 type="text"
                                                                 value={lstate}
@@ -845,6 +862,7 @@ function ConsumerDashboard() {
                                                         </Grid2>
                                                         <Grid2 item size={6}>
                                                             <Input
+                                                                className={styles.passwordInput}
                                                                 fullWidth
                                                                 type="text"
                                                                 value={lzip}
@@ -894,9 +912,7 @@ function ConsumerDashboard() {
                 role="presentation"
                 onKeyDown={toggleCheckoutDrawer(anchor, false)}
                 p={3}
-                height={'100%'}
-                color={'whitesmoke'}
-                bgcolor={'#162541'}
+                className={styles.drawer}
             >
                 <Typography sx={{cursor: "pointer"}} onClick={toggleCheckoutDrawer(anchor, false, true)} variant="h3"
                             textAlign='right'>X</Typography>
@@ -960,9 +976,7 @@ function ConsumerDashboard() {
             role="presentation"
             onKeyDown={toggleCartDrawer(anchor, false)}
             p={3}
-            min-height={'100%'}
-            color={'whitesmoke'}
-            bgcolor={'#162541'}
+            className={styles.drawer}
         >
             <Typography sx={{cursor: "pointer"}} onClick={toggleCartDrawer(anchor, false, true)} variant="h3"
                         textAlign='right'>X</Typography>
@@ -1028,13 +1042,49 @@ function ConsumerDashboard() {
         </Box>
     )
 
+    const [snackBarState, setSnackBarState] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
+
+    const handleSnackBarState = (open, message, severity) => {
+        setSnackBarState({
+            open: open,
+            message: message,
+            severity: severity
+        })
+    }
+
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarState({
+            open: false,
+            message: '',
+            severity: 'success'
+        });
+    };
+
     return (
         <Box className={styles.dashboardBGC}>
+            <Snackbar open={snackBarState.open} autoHideDuration={6000} onClose={handleSnackBarClose}>
+                <Alert
+                    onClose={handleSnackBarClose}
+                    severity={snackBarState.severity}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackBarState.message}
+                </Alert>
+            </Snackbar>
             <Grid2 container className={styles.navWrapper}>
-                <Grid2 item size={2}>
+                <Grid2 item size={6}>
                     <Typography variant="h4">{company_name}</Typography>
                 </Grid2>
-                <Grid2 item size={8}>
+                <Grid2 item size={6}>
                     <nav className={styles.nav}>
                         <Link to={""} className={styles.link}>
                             <Typography variant="h5">Inventory</Typography>
@@ -1047,10 +1097,6 @@ function ConsumerDashboard() {
                                 Orders
                             </Typography>
                         </Link>
-                    </nav>
-                </Grid2>
-                <Grid2 item size={2}>
-                    <nav className={styles.navicons}>
                         <Drawer
                             anchor={"right"}
                             open={state["right"]}
@@ -1065,17 +1111,11 @@ function ConsumerDashboard() {
                         >
                             {cartDrawer("right")}
                         </Drawer>
-                        <Typography variant="h6" className={styles.link}>
-                            <FaCartFlatbed
-                                onClick={handleGetCart}
-                                size={35}
-                            />
+                        <Typography variant="h5" className={styles.link} onClick={handleGetCart}>
+                            Cart
                         </Typography>
-                        <Typography variant="h6" className={styles.link}>
-                            <IoPersonCircleSharp
-                                onClick={toggleDrawer("right", true, true)}
-                                size={35}
-                            />
+                        <Typography onClick={toggleDrawer("right", true, true)} variant="h5" className={styles.link}>
+                            Account
                         </Typography>
                     </nav>
                 </Grid2>
@@ -1100,6 +1140,7 @@ function ConsumerStoreAccordian({
                                     setStores,
                                     index,
                                     stores,
+                                    handleSnackBarState
                                 }) {
     const {token} = useSelector((state) => state.user.data);
     const [lstoreName, setStoreName] = useState(store_name);
@@ -1162,6 +1203,7 @@ function ConsumerStoreAccordian({
             };
             updated[index] = shaped;
             setStores([...updated]);
+            handleSnackBarState(true, 'Store location updated successfully!', 'success');
             handleCloseupdateLocation();
         } catch (error) {
             console.error(error.message);
@@ -1183,6 +1225,7 @@ function ConsumerStoreAccordian({
             let updated = [...stores];
             updated.splice(index, 1);
             setStores([...updated]);
+            handleSnackBarState(true, 'Store location deleted successfully!', 'success');
         } catch (error) {
             console.error(error.message);
         }

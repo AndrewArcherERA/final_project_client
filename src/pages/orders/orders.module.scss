@@ -17,6 +17,13 @@
   text-align: center;
 }
 
+.ordersContainer {
+  width: 100%;
+  min-height: calc(100vh - 153px);
+  max-height: calc(100vh - 153px);
+  overflow-y: scroll;
+}
+
 .heading {
   padding-top: 10px;
   padding-bottom: 10px;

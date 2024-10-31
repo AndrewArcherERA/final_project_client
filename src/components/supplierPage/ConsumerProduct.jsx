@@ -1,4 +1,4 @@
-import {Box, Button, Grid2, Input, Typography} from "@mui/material";
+import {Alert, Box, Button, Grid2, Input, Typography} from "@mui/material";
 import React from "react";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -8,6 +8,7 @@ import {useState} from "react";
 import styles from "../../pages/suppliers/suppliers.module.scss";
 import {useSelector} from "react-redux";
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
 
 function ConsumerProduct({
                              productID,
@@ -47,11 +48,11 @@ function ConsumerProduct({
             }
             await axios.post(url, data, config).then(() => {
                 setState({...state, ['right']: false});
-                alert(`Added ${name} to cart`);
+                handleSnackSentOpen()
             });
         } catch (error) {
             if (error.status === 400) {
-                alert('Item already in cart')
+                handleSnackDeleteOpen()
                 setState({...state, ['right']: false});
                 return
             }
@@ -183,8 +184,55 @@ function ConsumerProduct({
         else if (value < e.target.min) e.target.value = e.target.min;
     }
 
+    const [snackSent, setSnackSent] = React.useState(false);
+    const [snackDelete, setSnackDelete] = React.useState(false);
+
+    const handleSnackSentOpen = () => {
+        setSnackSent(true);
+    };
+
+    const handleSnackSentClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackSent(false);
+    };
+
+    const handleSnackDeleteOpen = () => {
+        setSnackDelete(true);
+    };
+
+    const handleSnackDeleteClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackDelete(false);
+    };
+
     return (
         <Box borderBottom={1} height={'15vh'} textAlign={"center"}>
+            <Snackbar open={snackSent} autoHideDuration={6000} onClose={handleSnackSentClose}>
+                <Alert
+                    onClose={handleSnackSentClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    Item added to cart!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={snackDelete} autoHideDuration={6000} onClose={handleSnackDeleteClose}>
+                <Alert
+                    onClose={handleSnackDeleteClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    Item already in cart!
+                </Alert>
+            </Snackbar>
             <Grid2 container alignItems={"center"} height={"100%"}>
                 <Grid2 size={2} item className={styles.col}>
                     <img className={styles.productImage} src={image} alt={'product media'}/>

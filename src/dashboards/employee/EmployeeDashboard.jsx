@@ -27,6 +27,7 @@ function EmployeeDashboard() {
             role="presentation"
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
+            className={styles.drawer}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -55,7 +56,7 @@ function EmployeeDashboard() {
                     </Box>
                 </ListItem>
                 <Divider/>
-                <Button fullWidth color="error" onClick={handleLogout}>
+                <Button variant={'contained'} fullWidth color="error" onClick={handleLogout}>
                     Logout
                 </Button>
                 <Divider/>
@@ -63,32 +64,20 @@ function EmployeeDashboard() {
         </Box>
     );
     return (
-        <>
-            <Grid2 container px={3} py={1} borderBottom={2}>
-                <Grid2 item size={3}>
+        <Box className={styles.dashboardBGC}>
+            <Grid2 container className={styles.navWrapper}>
+                <Grid2 item size={6} display={"flex"} gap={2} alignItems={"center"}>
                     <Typography variant={'h4'}>{user.data.company_name}</Typography>
                     <Typography variant={'h5'}>{user.data.storeName}</Typography>
                 </Grid2>
-                <Grid2 item size={7}>
+                <Grid2 item size={6}>
                     <nav className={styles.nav}>
                         <Link to={""} className={styles.link}>
-                            <Typography variant="h6">Inventory</Typography>
-                        </Link>
-                        <Link to={"messages"} className={styles.link}>
-                            <Typography variant="h6">Messages</Typography>
+                            <Typography variant="h5">Inventory</Typography>
                         </Link>
                         <Link to={"orders"} className={styles.link}>
-                            <Typography variant="h6">Orders</Typography>
+                            <Typography variant="h5">Orders</Typography>
                         </Link>
-                    </nav>
-                </Grid2>
-                <Grid2 item size={2}>
-                    <nav className={styles.navicons}>
-                        {/* <Link to={"cart"} className={styles.link}>
-                            <Typography variant="h6">
-                                <FaShoppingCart size={30} />
-                            </Typography>
-                        </Link> */}
                         <Drawer
                             anchor={"right"}
                             open={state["right"]}
@@ -96,24 +85,14 @@ function EmployeeDashboard() {
                         >
                             {accountDrawer("right")}
                         </Drawer>
-                        <Typography variant="h6" className={styles.link}>
-                            <IoPersonCircleSharp
-                                onClick={toggleDrawer("right", true, true)}
-                                size={35}
-                            />
+                        <Typography onClick={toggleDrawer("right", true, true)} variant="h5" className={styles.link}>
+                            Account
                         </Typography>
                     </nav>
                 </Grid2>
             </Grid2>
-            <Box
-                justifyContent={"center"}
-                alignItems={"center"}
-                display={"flex"}
-                className={styles.outletWrapper}
-            >
-                <Outlet/>
-            </Box>
-        </>
+            <Outlet/>
+        </Box>
     );
 }
 

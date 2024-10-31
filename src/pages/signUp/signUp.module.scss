@@ -1,12 +1,60 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 500px;
-    max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 500px;
+  max-width: 500px;
+}
+
+.main {
+  background: rgb(0, 31, 88);
+  background: -moz-linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  background: -webkit-linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  background: linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001f58", endColorstr="#002870", GradientType=1);
+}
+
+.container {
+  background: rgb(0, 31, 88);
+  background: -moz-linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  background: -webkit-linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  background: linear-gradient(249deg, rgba(0, 31, 88, 1) 0%, rgba(0, 21, 57, 1) 45%, rgba(0, 40, 112, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001f58", endColorstr="#002870", GradientType=1);
+
+  color: whitesmoke;
+  padding: 20px;
+  border-radius: 10px;
+  -webkit-box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+}
+
+input {
+  padding: 15px;
+  font-size: larger;
 }
 
 .heading {
-    text-align: center;
-    width: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.bgPhoto {
+  width: 65vw;
+  max-width: 1400px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  -webkit-box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 14px -6px rgba(0, 0, 0, 1);
+}
+
+.bigText {
+  color: whitesmoke;
+  background-color: rgba(0, 0, 0, 0.45);
+  padding: 10px;
+  border-radius: 15px;
 }

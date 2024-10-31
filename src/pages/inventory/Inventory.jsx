@@ -53,6 +53,7 @@ function Inventory({userType}) {
                                                  storeStocks={product.store_quantities}
                                                  key={index}
                                                  id={product.id}
+                                                 getInventory={getInventory}
                                 />
                             </div>
                         )
@@ -82,7 +83,6 @@ function Inventory({userType}) {
             </div>
         </div>
     )
-        ;
 }
 
 export default Inventory;

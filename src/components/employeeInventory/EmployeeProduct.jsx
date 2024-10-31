@@ -13,7 +13,7 @@ function EmployeeProduct({
                              nextDeliveryQuantity
                          }) {
     return (
-        <Box borderBottom={2}>
+        <Box borderBottom={2} color={'whitesmoke'}>
             <Grid2 container height={'100%'} display={"flex"} alignItems={'center'}>
                 <Grid2 className={styles.col} item size={2} textAlign={"center"}>
                     <img src={image} className={styles.image} alt={'image'}/>
@@ -34,7 +34,7 @@ function EmployeeProduct({
                     }) : <Typography className={styles.col}>-</Typography>}
                 </Grid2>
                 <Grid2 item size={1} textAlign={"center"}>
-                    <Typography className={styles.col}>{warehouseStock}</Typography>
+                    <Typography className={styles.col}>{warehouseStock ? warehouseStock : '-'}</Typography>
                 </Grid2>
                 <Grid2 className={styles.col} item size={2} textAlign={"center"}>
                     <Box>

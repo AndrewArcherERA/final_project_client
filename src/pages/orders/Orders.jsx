@@ -21,7 +21,7 @@ function Orders() {
                         <Grid2 item size={1}>
                             <Typography variant="h6">Order ID</Typography>
                         </Grid2>
-                        <Grid2 item size={1}>
+                        <Grid2 item size={2}>
                             <Typography variant="h6">Product</Typography>
                         </Grid2>
                         <Grid2 item size={1}>
@@ -36,11 +36,13 @@ function Orders() {
                         <Grid2 item size={2}>
                             <Typography variant="h6">Expected Delivery Date</Typography>
                         </Grid2>
-                        <Grid2 item size={2}>
+                        <Grid2 item size={1}>
                             <Typography variant="h6">Delivery Date</Typography>
                         </Grid2>
-                        <Grid2 item size={3}>
+                        <Grid2 item size={2}>
                             <Typography variant="h6">Delivery Address</Typography>
+                        </Grid2>
+                        <Grid2 item size={1}>
                         </Grid2>
                     </Grid2>
                 </div>

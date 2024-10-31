@@ -8,7 +8,7 @@ import {
     ListItem,
     Typography,
     Button,
-    Modal,
+    Modal, Alert,
 } from "@mui/material";
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
@@ -20,6 +20,7 @@ import bcrypt from "bcryptjs";
 import {useDispatch} from "react-redux";
 import {updateUserInfo} from "../../features/user/userSlice";
 import {logout} from "../../features/user/userSlice";
+import Snackbar from "@mui/material/Snackbar";
 
 function SupplierDashboard() {
     const [state, setState] = useState({
@@ -66,7 +67,7 @@ function SupplierDashboard() {
             userID: id,
         };
         await dispatch(updateUserInfo(data)).then(function () {
-            alert("User info updated succesfully");
+            handleSnackBarState(true, 'User info updated succesfully', 'success');
             handleCloseInfo();
         });
     }
@@ -94,12 +95,11 @@ function SupplierDashboard() {
                 };
 
                 await axios.put(url, data, config).then(function (res) {
-                    alert("Password changed sucsesfully");
+                    handleSnackBarState(true, 'Password changed sucsesfully', 'success');
                     handleClose();
                 });
             } else {
-                alert("Old password does not match current stored password");
-                return;
+                handleSnackBarState(true, 'Old password does not match current stored password', 'error')
             }
         } catch (error) {
             console.log(error);
@@ -115,6 +115,7 @@ function SupplierDashboard() {
             role="presentation"
             onKeyDown={toggleDrawer(anchor, false)}
             p={3}
+            className={styles.drawer}
         >
             <Typography
                 sx={{cursor: "pointer"}}
@@ -131,7 +132,7 @@ function SupplierDashboard() {
                     </Typography>
                 </ListItem>
                 <Divider/>
-                <ListItem>
+                <ListItem sx={{backgroundColor: '#001539', borderRadius: '10px'}}>
                     <Grid2 container rowSpacing={1}>
                         <Grid2 item size={6}>
                             <Typography variant="h6">Email:</Typography>
@@ -207,6 +208,7 @@ function SupplierDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={firstName}
@@ -222,6 +224,7 @@ function SupplierDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={lastName}
@@ -237,6 +240,7 @@ function SupplierDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userEmail}
@@ -250,6 +254,7 @@ function SupplierDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userPhone}
@@ -263,6 +268,7 @@ function SupplierDashboard() {
                                             </Grid2>
                                             <Grid2 item size={6}>
                                                 <Input
+                                                    className={styles.passwordInput}
                                                     fullWidth
                                                     type="text"
                                                     value={userComapany}
@@ -288,7 +294,7 @@ function SupplierDashboard() {
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <Button fullWidth color="error" onClick={handleLogout}>
+                    <Button fullWidth color="error" variant={'contained'} onClick={handleLogout}>
                         Logout
                     </Button>
                 </ListItem>
@@ -296,32 +302,57 @@ function SupplierDashboard() {
             </List>
         </Box>
     );
+
+    const [snackBarState, setSnackBarState] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
+
+    const handleSnackBarState = (open, message, severity) => {
+        setSnackBarState({
+            open: open,
+            message: message,
+            severity: severity
+        })
+    }
+
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarState({
+            open: false,
+            message: '',
+            severity: 'success'
+        });
+    };
+
     return (
-        <>
-            <Grid2 container px={3} py={1} borderBottom={2}>
+        <Box className={styles.dashboardBGC}>
+            <Snackbar open={snackBarState.open} autoHideDuration={6000} onClose={handleSnackBarClose}>
+                <Alert
+                    onClose={handleSnackBarClose}
+                    severity={snackBarState.severity}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackBarState.message}
+                </Alert>
+            </Snackbar>
+            <Grid2 container className={styles.navWrapper}>
                 <Grid2 item size={2}>
-                    <Typography variant="h4">Company Name</Typography>
+                    <Typography variant="h4">{company_name}</Typography>
                 </Grid2>
-                <Grid2 item size={8}>
-                    <nav className={styles.nav}>
+                <Grid2 item size={10} alignItems={"flex-end"}>
+                    <nav className={styles.navicons}>
                         <Link to={""} className={styles.link}>
-                            <Typography variant="h6">Products</Typography>
-                        </Link>
-                        <Link to={"messages"} className={styles.link}>
-                            <Typography variant="h6">Messages</Typography>
+                            <Typography variant="h5">Products</Typography>
                         </Link>
                         <Link to={"orders"} className={styles.link}>
-                            <Typography variant="h6">Orders</Typography>
+                            <Typography variant="h5">Orders</Typography>
                         </Link>
-                    </nav>
-                </Grid2>
-                <Grid2 item size={2}>
-                    <nav className={styles.navicons}>
-                        {/* <Link to={"cart"} className={styles.link}>
-                            <Typography variant="h6">
-                                <FaShoppingCart size={30} />
-                            </Typography>
-                        </Link> */}
                         <Drawer
                             anchor={"right"}
                             open={state["right"]}
@@ -329,24 +360,14 @@ function SupplierDashboard() {
                         >
                             {accountDrawer("right")}
                         </Drawer>
-                        <Typography variant="h6" className={styles.link}>
-                            <IoPersonCircleSharp
-                                onClick={toggleDrawer("right", true, true)}
-                                size={35}
-                            />
+                        <Typography onClick={toggleDrawer("right", true, true)} variant="h5" className={styles.link}>
+                            Account
                         </Typography>
                     </nav>
                 </Grid2>
             </Grid2>
-            <Box
-                justifyContent={"center"}
-                alignItems={"center"}
-                display={"flex"}
-                className={styles.outletWrapper}
-            >
-                <Outlet/>
-            </Box>
-        </>
+            <Outlet/>
+        </Box>
     );
 }
 
