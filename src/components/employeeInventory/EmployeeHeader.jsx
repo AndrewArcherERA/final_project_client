@@ -1,34 +1,33 @@
-import { Box, Grid2 } from '@mui/material'
+import {Box, Grid2, Typography} from '@mui/material'
 import React from 'react'
+import styles from '../../pages/inventory/inventory.module.scss'
 
 function EmployeeHeader() {
-  return (
-    <Box p={1} paddingRight={3} fontWeight={"600"} fontSize={"larger"}>
-            <Grid2 container>
-                <Grid2 item size={1}></Grid2>
-                <Grid2 item size={3} textAlign={"center"}>
-                    Product Name
+    return (
+        <Box className={styles.header} fontWeight={"600"}>
+            <Grid2 container size={12}>
+                <Grid2 item size={2}></Grid2>
+                <Grid2 item size={2} textAlign={"center"}>
+                    <Typography variant={'h6'} fontWeight={'600'}>Product Name</Typography>
                 </Grid2>
                 <Grid2 item size={1} textAlign={"center"}>
-                    Store Stock
-                </Grid2>
-                <Grid2 item size={1} textAlign={"center"}>
-                    Min Stock level
+                    <Typography variant={'h6'} fontWeight={'600'}>Stock</Typography>
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Warehouse Stock
+                    <Typography variant={'h6'} fontWeight={'600'}>Supplier Name</Typography>
                 </Grid2>
                 <Grid2 item size={2} textAlign={"center"}>
-                    Supplier Name
+                    <Typography variant={'h6'} fontWeight={'600'}>Sister Stores</Typography>
                 </Grid2>
                 <Grid2 item size={1} textAlign={"center"}>
-                    Next Shipment
+                    <Typography variant={'h6'} fontWeight={'600'}>In Warehouse</Typography>
                 </Grid2>
-                <Grid2 item size={1} textAlign={"center"}>
+                <Grid2 item size={2} textAlign={"center"}>
+                    <Typography variant={'h6'} fontWeight={'600'}>Next Shipment</Typography>
                 </Grid2>
             </Grid2>
         </Box>
-  )
+    )
 }
 
 export default EmployeeHeader

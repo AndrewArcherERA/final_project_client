@@ -1,44 +1,91 @@
 .header {
-    padding-right: 15px;
+  border-bottom: 1px solid whitesmoke;
+  background-color: #001539;
 }
 
 .container {
-    width: 80vw;
-    border: 2px solid black;
-    background-color: #42a5f5;
-    border-radius: 5px;
-    padding: 20px;
-    padding-right: 30px;
+  width: 100%;
+  max-height: calc(100vh - 84px);
+  min-height: calc(100vh - 84px);
 }
 
 .buttonContainer {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 15px;
 }
 
 .productContainer {
-    width: 100%;
-    background-color: white;
-    height: 70vh;
-    max-height: 70vh;
-    overflow-y: scroll;
+  width: 100%;
+  min-height: calc(100vh - 150px);
+  max-height: calc(100vh - 150px);
+  overflow-y: scroll;
+  background-color: #001539;
 }
 
 .product {
-    width: 100%;
+  width: 100%;
 }
 
 .col {
-    border-right: 1px solid black;
-    height: 100%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  border-right: 1px solid whitesmoke;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newProd {
+  background-color: #162541;
+  color: whitesmoke;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.passwordInput {
+  background-color: whitesmoke;
+  padding: 3px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 90vh;
+  flex-direction: column;
+  color: #2b5cb4;
+  gap: 10px;
+}
+
+.loading > img {
+  width: 8em;
+  height: auto;
+}
+
+.headingCol {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input {
-    text-align: center;
+  text-align: center;
+}
+
+.isEven {
+  background-color: #162541;
+}
+
+.productImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.updateStockInput {
+  text-align: right;
 }

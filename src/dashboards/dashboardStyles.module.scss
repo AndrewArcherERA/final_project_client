@@ -1,25 +1,106 @@
+.dashboardBGC {
+  background-color: #162541;
+  color: white;
+}
+
 .nav {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
-    max-height: 1vh;
+  display: flex;
+  gap: 40px;
+  justify-content: flex-end;
+  max-height: 1vh;
+  align-items: center;
+  min-height: 100%;
 }
+
+.navWrapper {
+  background-color: #1f74c7;
+  max-height: 100px;
+  padding: 20px;
+  border-bottom: 2px solid #f3f3f3;
+}
+
 .navicons {
-    display: flex;
-    gap: 40px;
-    justify-content: end;
-    align-items: center;
+  display: flex;
+  gap: 40px;
+  justify-content: end;
+  align-items: center;
+  min-height: 100%;
 }
+
 .outletWrapper {
-    height: 90vh;
-    max-height: 93vh;
+  max-height: 93vh;
+  overflow-y: hidden;
 }
 
 .link {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 .link:hover {
-    color: #42a5f5
+  color: #42a5f5;
+  cursor: pointer;
+}
+
+.passWordModel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.passWordModelBox {
+  width: 500px;
+  height: 120px;
+  padding: 12px;
+  border-radius: 5px;
+  background-color: #001539;
+}
+
+.passform {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  height: 100%;
+  background-color: #001539;
+}
+
+.drawer {
+  overflow-y: scroll;
+  background-color: #162541;
+  color: whitesmoke;
+  height: 100%;
+}
+
+.infoModal {
+  width: 600px;
+  color: whitesmoke;
+  padding: 12px;
+  border-radius: 5px;
+  background-color: #001539;
+}
+
+.cartItem {
+  min-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: #001539;
+  color: white;
+  padding: 10px 0;
+}
+
+.passwordInput {
+  background-color: whitesmoke;
+  padding: 3px;
+}
+
+.cartImage {
+  height: auto;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.quantityInput {
+  background-color: whitesmoke;
+  padding: 3px;
 }
