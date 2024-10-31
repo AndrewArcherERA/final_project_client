@@ -4,7 +4,7 @@ import {Alert, Box, Button, ToggleButton, ToggleButtonGroup, Typography} from "@
 import styles from "./signIn.module.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {signInUser} from "../../features/user/userSlice";
-import bgImage from '../../images/AdobeStock_321288298.jpeg'
+import bgImage from '../../../public/images/AdobeStock_321288298.jpeg'
 import Snackbar from "@mui/material/Snackbar";
 
 function SignIn() {

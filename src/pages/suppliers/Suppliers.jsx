@@ -5,8 +5,8 @@ import styles from "./suppliers.module.scss";
 import ConsumerProduct from "../../components/supplierPage/ConsumerProduct";
 import axios from "axios";
 import {useSelector} from "react-redux";
-import noProds from '../../images/noProds.png'
-import loading from '../../images/loading.svg'
+import noProds from '../../../public/images/noProds.png'
+import loading from '../../../public/images/loading.svg'
 
 function Suppliers() {
     const [suppliers, setSuppliers] = useState([]);

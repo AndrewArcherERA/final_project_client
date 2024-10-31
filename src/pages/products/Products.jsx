@@ -15,8 +15,8 @@ import {
 import {FaImage} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import axios from "axios";
-import loading from '../../images/loading.svg';
-import noProds from '../../images/noProds.png';
+import loading from '../../../public/images/loading.svg';
+import noProds from '../../../public/images/noProds.png';
 import Snackbar from "@mui/material/Snackbar";
 
 function Products() {
