@@ -9,7 +9,7 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import styles from "./signUp.module.scss";
 import axios from 'axios';
-import bgImage from "../../../public/images/AdobeStock_376188865.jpeg";
+import bgImage from "../../images/AdobeStock_376188865.jpeg";
 import Snackbar from "@mui/material/Snackbar";
 
 function SignUp() {

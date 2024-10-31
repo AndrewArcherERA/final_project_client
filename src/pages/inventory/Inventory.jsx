@@ -7,7 +7,7 @@ import EmployeeProduct from "../../components/employeeInventory/EmployeeProduct"
 import {useSelector} from "react-redux";
 import axios from "axios";
 import styles from './inventory.module.scss'
-import loading from '../../../public/images/loading.svg'
+import loading from '../../images/loading.svg'
 
 function Inventory({userType}) {
     const [inventory, setInventory] = useState([]);
