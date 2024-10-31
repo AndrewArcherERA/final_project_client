@@ -78,7 +78,7 @@ function ConsumerProduct({
                 product_id: id,
                 quantity: adjustableQuantity,
             }
-            const url = `http://localhost:8080/inventory/sendToStore`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/inventory/sendToStore`;
             await axios.post(url, data, config).then(() => {
                 getInventory()
                 setCartState({...cartState, ['right']: false})
@@ -121,7 +121,7 @@ function ConsumerProduct({
                 Authorization: user.token
             }
         }
-        const url = 'http://localhost:8080/inventory/deleteProduct';
+        const url = 'http://final-project.us-east-1.elasticbeanstalk.com/inventory/deleteProduct';
         const data = {
             location_id: deleteLocation.location_id,
             location_type: deleteLocation.type,
@@ -145,7 +145,7 @@ function ConsumerProduct({
         const config = {
             headers: {Authorization: user.token},
         };
-        const url = `http://localhost:8080/consumerStore/getStores/${user.id}`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/consumerStore/getStores/${user.id}`;
         let response = await axios.get(url, config);
         setStores(response.data);
     }

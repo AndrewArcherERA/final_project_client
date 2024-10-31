@@ -5,7 +5,7 @@ export const signInUser = createAsyncThunk(
     "user/signInUser",
     async (data, thunkAPI) => {
         try {
-            const url = "http://localhost:8080/auth/signIn";
+            const url = "http://final-project.us-east-1.elasticbeanstalk.com/auth/signIn";
             let response = await axios.post(url, data);
             response = {data: response.data, type: data.user_type};
             return response;
@@ -20,7 +20,7 @@ export const updateUserInfo = createAsyncThunk(
     async (data, thunkAPI) => {
         const {f_name, l_name, email, phone, company_name, user_type, token, userID} = data;
         try {
-            const url = "http://localhost:8080/account/updateUserInfo";
+            const url = "http://final-project.us-east-1.elasticbeanstalk.com/account/updateUserInfo";
             const config = {
                 headers: {
                     Authorization: token,

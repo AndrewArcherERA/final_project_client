@@ -42,7 +42,7 @@ function Order({
                 Authorization: token
             }
         }
-        const url = 'http://localhost:8080/orders/updateOrderStatus';
+        const url = 'http://final-project.us-east-1.elasticbeanstalk.com/orders/updateOrderStatus';
         const data = {
             order_id: order_id,
             status: 'received'

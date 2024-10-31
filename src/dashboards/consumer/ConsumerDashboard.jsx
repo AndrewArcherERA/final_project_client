@@ -100,7 +100,7 @@ function ConsumerDashboard() {
         const config = {
             headers: {Authorization: token},
         };
-        const url = `http://localhost:8080/consumerStore/getStores/${id}`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/consumerStore/getStores/${id}`;
         let response = await axios.get(url, config);
         setStores(response.data);
     }
@@ -129,7 +129,7 @@ function ConsumerDashboard() {
                 phone: e.target[9].value,
             },
         };
-        const url = `http://localhost:8080/consumerStore/createStore`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/consumerStore/createStore`;
         await axios.post(url, body, config).then((response) => {
             setStores([...stores, response.data]);
             handleSnackBarState(true, 'Store created successfully!', 'success')
@@ -178,11 +178,11 @@ function ConsumerDashboard() {
         };
 
         try {
-            const url = `http://localhost:8080/account/getStoredPass/${type}/${id}`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/getStoredPass/${type}/${id}`;
             let validPass = await axios.get(url, config);
 
             if (bcrypt.compareSync(oldPass, validPass.data[0].password)) {
-                const url = `http://localhost:8080/account/updatePassword`;
+                const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/updatePassword`;
                 const salt = bcrypt.genSaltSync(10);
                 newPass = bcrypt.hashSync(newPass, salt);
                 let data = {
@@ -216,7 +216,7 @@ function ConsumerDashboard() {
             state: e.target[3].value,
             zip: e.target[4].value,
         };
-        const url = `http://localhost:8080/account/createWarehouse`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/createWarehouse`;
         await axios.post(url, body, config).then((response) => {
             setWarehouse(response.data[0]);
             handleSnackBarState(true, 'Warehouse created successfully!', 'success');
@@ -237,7 +237,7 @@ function ConsumerDashboard() {
             state: e.target[3].value,
             zip: e.target[4].value,
         };
-        const url = `http://localhost:8080/account/updateWarehouse`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/updateWarehouse`;
         await axios.post(url, body, config).then((response) => {
             setWarehouse(response.data[0]);
             handleSnackBarState(true, 'Warehouse info updated successfully!', 'success')
@@ -250,7 +250,7 @@ function ConsumerDashboard() {
             headers: {Authorization: token},
         };
 
-        const url = `http://localhost:8080/account/getWarehouses`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/getWarehouses`;
         let response = await axios.get(url, config);
         setWarehouse(response.data[0]);
         setWarehouseName(response.data[0].name);
@@ -264,7 +264,7 @@ function ConsumerDashboard() {
         const config = {
             headers: {Authorization: token},
         };
-        const url = `http://localhost:8080/account/deleteWarehouse/${consumer_id}`;
+        const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/deleteWarehouse/${consumer_id}`;
         await axios.delete(url, config).then(() => {
             setWarehouse();
             handleSnackBarClose(true, 'Warehouse deleted.', 'success')
@@ -299,7 +299,7 @@ function ConsumerDashboard() {
                     Authorization: token
                 }
             }
-            const url = 'http://localhost:8080/orders/createConsumerOrder';
+            const url = 'http://final-project.us-east-1.elasticbeanstalk.com/orders/createConsumerOrder';
             const data = {
                 locationType: deliveryLocation.type,
                 locationID: deliveryLocation.data.id,
@@ -1194,7 +1194,7 @@ function ConsumerStoreAccordian({
                     phone: e.target[9].value,
                 },
             };
-            const url = `http://localhost:8080/consumerStore/updateStore`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/consumerStore/updateStore`;
             let response = await axios.post(url, body, config);
             let updated = [...stores];
             let shaped = {
@@ -1220,7 +1220,7 @@ function ConsumerStoreAccordian({
                 },
             };
 
-            const url = `http://localhost:8080/consumerStore/deleteStore`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/consumerStore/deleteStore`;
             await axios.delete(url, config);
             let updated = [...stores];
             updated.splice(index, 1);

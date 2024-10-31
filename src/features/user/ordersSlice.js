@@ -6,7 +6,7 @@ export const getOrders = createAsyncThunk(
     'orders/getOrders',
     async (data, thunkAPI) => {
         try {
-            const url = `http://localhost:8080/orders/getOrders/${data.user_type}`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/orders/getOrders/${data.user_type}`;
             const config = {
                 headers: {
                     Authorization: data.token

@@ -23,7 +23,7 @@ function Suppliers() {
                     Authorization: user.token
                 }
             }
-            const supplierList = await axios.get('http://localhost:8080/supplierPage/getSuppliers', config);
+            const supplierList = await axios.get('http://final-project.us-east-1.elasticbeanstalk.com/supplierPage/getSuppliers', config);
             setSuppliers([...supplierList.data]);
         } catch (error) {
             console.log(error.message);
@@ -38,7 +38,7 @@ function Suppliers() {
                 }
             }
 
-            let prods = await axios.get(`http://localhost:8080/supplierPage/getSupplierProds/${supplier_id}`, config);
+            let prods = await axios.get(`http://final-project.us-east-1.elasticbeanstalk.com/supplierPage/getSupplierProds/${supplier_id}`, config);
             setSupplierProducts([...prods.data]);
         } catch (error) {
             console.log(error.message);

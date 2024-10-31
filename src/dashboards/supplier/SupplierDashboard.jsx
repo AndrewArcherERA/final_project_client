@@ -81,11 +81,11 @@ function SupplierDashboard() {
         };
 
         try {
-            const url = `http://localhost:8080/account/getStoredPass/${type}/${id}`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/getStoredPass/${type}/${id}`;
             let validPass = await axios.get(url, config);
 
             if (bcrypt.compareSync(oldPass, validPass.data[0].password)) {
-                const url = `http://localhost:8080/account/updatePassword`;
+                const url = `http://final-project.us-east-1.elasticbeanstalk.com/account/updatePassword`;
                 const salt = bcrypt.genSaltSync(10);
                 newPass = bcrypt.hashSync(newPass, salt);
                 let data = {

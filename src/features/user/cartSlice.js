@@ -11,7 +11,7 @@ export const getCartItems = createAsyncThunk(
                     Authorization: data.token
                 }
             }
-            const url = "http://localhost:8080/cart/getCartItems";
+            const url = "http://final-project.us-east-1.elasticbeanstalk.com/cart/getCartItems";
             let response = await axios.get(url, config);
             return response.data;
         } catch (error) {
@@ -29,7 +29,7 @@ export const deleteCartItem = createAsyncThunk(
                     Authorization: data.token
                 }
             }
-            const url = `http://localhost:8080/cart/deleteCartItem/${data.productID}`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/cart/deleteCartItem/${data.productID}`;
             await axios.delete(url, config);
             return data.productID;
         } catch (error) {
@@ -52,7 +52,7 @@ export const updateQuantity = createAsyncThunk(
                 productID: data.productID,
                 quantity: data.quantity
             }
-            const url = `http://localhost:8080/cart/updateQuantity`;
+            const url = `http://final-project.us-east-1.elasticbeanstalk.com/cart/updateQuantity`;
             await axios.post(url, body, config);
             return {quantity: data.quantity, productID: data.productID}
         } catch (error) {

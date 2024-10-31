@@ -57,7 +57,7 @@ function SignUp() {
             user_type: userType,
         }
 
-        const url = 'http://localhost:8080/auth/register'
+        const url = 'http://final-project.us-east-1.elasticbeanstalk.com/auth/register'
         try {
             await axios.post(url, newUser).then(() => {
                 handleSnackBarState(true, 'Account registered succesfully!', 'success')
