@@ -5,7 +5,7 @@ export const signInUser = createAsyncThunk(
     "user/signInUser",
     async (data, thunkAPI) => {
         try {
-            const url = "http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/auth/signIn";
+            const url = "https://arrowsupplies.net/auth/signIn";
             let response = await axios.post(url, data);
             response = {data: response.data, type: data.user_type};
             return response;
@@ -20,7 +20,7 @@ export const updateUserInfo = createAsyncThunk(
     async (data, thunkAPI) => {
         const {f_name, l_name, email, phone, company_name, user_type, token, userID} = data;
         try {
-            const url = "http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/account/updateUserInfo";
+            const url = "https://arrowsupplies.net/account/updateUserInfo";
             const config = {
                 headers: {
                     Authorization: token,

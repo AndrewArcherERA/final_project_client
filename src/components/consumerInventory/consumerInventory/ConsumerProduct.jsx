@@ -78,7 +78,7 @@ function ConsumerProduct({
                 product_id: id,
                 quantity: adjustableQuantity,
             }
-            const url = `http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/inventory/sendToStore`;
+            const url = `https://arrowsupplies.net/inventory/sendToStore`;
             await axios.post(url, data, config).then(() => {
                 getInventory()
                 setCartState({...cartState, ['right']: false})
@@ -121,7 +121,7 @@ function ConsumerProduct({
                 Authorization: user.token
             }
         }
-        const url = 'http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/inventory/deleteProduct';
+        const url = 'https://arrowsupplies.net/inventory/deleteProduct';
         const data = {
             location_id: deleteLocation.location_id,
             location_type: deleteLocation.type,
@@ -145,7 +145,7 @@ function ConsumerProduct({
         const config = {
             headers: {Authorization: user.token},
         };
-        const url = `http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/consumerStore/getStores/${user.id}`;
+        const url = `https://arrowsupplies.net/consumerStore/getStores/${user.id}`;
         let response = await axios.get(url, config);
         setStores(response.data);
     }

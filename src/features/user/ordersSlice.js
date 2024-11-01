@@ -6,7 +6,7 @@ export const getOrders = createAsyncThunk(
     'orders/getOrders',
     async (data, thunkAPI) => {
         try {
-            const url = `http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/orders/getOrders/${data.user_type}`;
+            const url = `https://arrowsupplies.net/orders/getOrders/${data.user_type}`;
             const config = {
                 headers: {
                     Authorization: data.token

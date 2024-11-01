@@ -57,7 +57,7 @@ function SignUp() {
             user_type: userType,
         }
 
-        const url = 'http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/auth/register'
+        const url = 'https://arrowsupplies.net/auth/register'
         try {
             await axios.post(url, newUser).then(() => {
                 handleSnackBarState(true, 'Account registered succesfully!', 'success')

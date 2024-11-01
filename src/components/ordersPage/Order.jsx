@@ -42,7 +42,7 @@ function Order({
                 Authorization: token
             }
         }
-        const url = 'http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/orders/updateOrderStatus';
+        const url = 'https://arrowsupplies.net/orders/updateOrderStatus';
         const data = {
             order_id: order_id,
             status: 'received'
