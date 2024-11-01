@@ -24,7 +24,7 @@ function Inventory({userType}) {
                     Authorization: user.data.token
                 }
             }
-            const url = `http://final-project.us-east-1.elasticbeanstalk.com/inventory/getInventory/${userType}/${user.data.warehouse_id ? user.data.warehouse_id : user.data.store_id}`;
+            const url = `http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/inventory/getInventory/${userType}/${user.data.warehouse_id ? user.data.warehouse_id : user.data.store_id}`;
             axios.get(url, config).then((res) => {
                 console.log(res)
                 setInventory([res.data]);

@@ -40,7 +40,7 @@ function ConsumerProduct({
                     Authorization: token
                 }
             }
-            const url = 'http://final-project.us-east-1.elasticbeanstalk.com/cart/addCartItem';
+            const url = 'http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/cart/addCartItem';
             const data = {
                 userID: id,
                 productID: productID,

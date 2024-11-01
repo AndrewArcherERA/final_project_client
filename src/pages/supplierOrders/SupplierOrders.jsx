@@ -123,7 +123,7 @@ function Order({
                 Authorization: token
             }
         }
-        const url = 'http://final-project.us-east-1.elasticbeanstalk.com/orders/updateOrderStatus';
+        const url = 'http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/orders/updateOrderStatus';
         const data = {
             order_id: orderId,
             status: 'shipped'

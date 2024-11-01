@@ -45,7 +45,7 @@ function Products() {
             formData.append('num_units_available', form[4].value);
 
             let product = await axios.post(
-                "http://final-project.us-east-1.elasticbeanstalk.com/products/createProduct",
+                "http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/products/createProduct",
                 formData,
                 {
                     headers: {
@@ -71,7 +71,7 @@ function Products() {
         try {
 
             let products = await axios.get(
-                `http://final-project.us-east-1.elasticbeanstalk.com/products/getProducts`,
+                `http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/products/getProducts`,
                 {
                     headers: {
                         Authorization: user.token,
@@ -500,7 +500,7 @@ function StockList(anchor, currentStock, product_id, products, setProducts, toke
             }
 
             await axios.put(
-                "http://final-project.us-east-1.elasticbeanstalk.com/products/updateStock",
+                "http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/products/updateStock",
                 data,
                 {
                     headers: {
@@ -631,7 +631,7 @@ function EditList(anchor, pricePerItem, itemsPerUnit, name, image, image_key, to
             formData.append('old_image_link', image);
 
             let updatedProduct = await axios.post(
-                "http://final-project.us-east-1.elasticbeanstalk.com/products/updateProduct",
+                "http://fp-server-again-env.eba-mtq3upkp.us-east-1.elasticbeanstalk.com/products/updateProduct",
                 formData,
                 {
                     headers: {
