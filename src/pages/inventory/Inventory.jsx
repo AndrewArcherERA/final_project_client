@@ -26,7 +26,6 @@ function Inventory({userType}) {
             }
             const url = `https://arrowsupplies.net/inventory/getInventory/${userType}/${user.data.warehouse_id ? user.data.warehouse_id : user.data.store_id}`;
             axios.get(url, config).then((res) => {
-                console.log(res)
                 setInventory([res.data]);
             })
         } catch (error) {

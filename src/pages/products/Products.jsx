@@ -54,11 +54,6 @@ function Products() {
                     },
                 }
             );
-            // form[0] = [];
-            // form[1].value = '';
-            // form[2].value = '';
-            // form[3].value = '';
-            // form[4].value = '';
             setnewProductState({right: false})
             handleSnackBarState(true, 'Product created successfully!', 'success');
             getAllProducts()
@@ -174,7 +169,8 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
+                                        <Input type={'number'} className={styles.passwordInput} required
+                                               placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -191,7 +187,8 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
+                                        <Input type={'number'} className={styles.passwordInput} required
+                                               placeholder="Enter quanity"/>
                                     </Grid2>
                                     <Grid2 item size={6} borderBottom={1}>
                                         <Typography
@@ -208,7 +205,8 @@ function Products() {
                                         justifyContent={"flex-end"}
                                         borderBottom={1}
                                     >
-                                        <Input className={styles.passwordInput} required placeholder="Enter quanity"/>
+                                        <Input type={'number'} className={styles.passwordInput} required
+                                               placeholder="Enter quanity"/>
                                     </Grid2>
                                 </Grid2>
                             </Box>
@@ -445,7 +443,7 @@ function Product({
                     <Typography className={styles.details}>{items_per_unit}</Typography>
                 </Grid2>
                 <Grid2 item size={1} className={styles.col}>
-                    <Typography className={styles.details}>{price_per_item * items_per_unit}</Typography>
+                    <Typography className={styles.details}>${price_per_item * items_per_unit}</Typography>
                 </Grid2>
                 <Grid2 item size={1} className={styles.col}>
                     <Typography className={styles.details}>{stock}</Typography>
