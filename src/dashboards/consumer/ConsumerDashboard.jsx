@@ -260,11 +260,11 @@ function ConsumerDashboard() {
         setzip(response.data[0].zip);
     }
 
-    async function deleteWarehouse(consumer_id) {
+    async function deleteWarehouse(warehouse_id) {
         const config = {
             headers: {Authorization: token},
         };
-        const url = `https://arrowsupplies.net/account/deleteWarehouse/${consumer_id}`;
+        const url = `https://arrowsupplies.net/account/deleteWarehouse/${warehouse_id}`;
         await axios.delete(url, config).then(() => {
             setWarehouse();
             handleSnackBarClose(true, 'Warehouse deleted.', 'success')
@@ -884,7 +884,7 @@ function ConsumerDashboard() {
                                         <Button onClick={handleOpenUpdateWarehouseModal}>Update</Button>
                                         <Button
                                             color="error"
-                                            onClick={() => deleteWarehouse(id)}
+                                            onClick={() => deleteWarehouse(warehouse.id)}
                                         >
                                             Delete
                                         </Button>
