@@ -11,6 +11,7 @@ function SupplierCard({company_name, phone, email, address}) {
             height={'100px'}
             display={"flex"}
             alignItems={"center"}
+            flexDirection={'column'}
             justifyContent={"center"}
             className={styles.companyCard}
         >
