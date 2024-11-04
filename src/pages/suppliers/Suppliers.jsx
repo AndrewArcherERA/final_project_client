@@ -72,7 +72,8 @@ function Suppliers() {
 
                              className={selected_company_id === supplier.id ? styles.isSelected : null}
                         >
-                            <SupplierCard company_name={supplier.company_name}/>
+                            <SupplierCard company_name={supplier.company_name} email={supplier.email}
+                                          phone={supplier.phone}/>
                         </div>
                     )
                 })) : null}
