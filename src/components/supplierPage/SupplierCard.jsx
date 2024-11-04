@@ -16,10 +16,8 @@ function SupplierCard({company_name, phone, email, address}) {
             className={styles.companyCard}
         >
             <Typography variant={'h5'}>{company_name}</Typography>
-            <div>
-                <Typography>Phone: {phone}</Typography>
-                <Typography> Email: {email}</Typography>
-            </div>
+            <Typography>Phone: {phone}</Typography>
+            <Typography> Email: {email}</Typography>
         </Box>
     );
 }
